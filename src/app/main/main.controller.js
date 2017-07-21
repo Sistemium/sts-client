@@ -28,7 +28,11 @@ export class MainController {
       socket.emit('setUser', this.userId);
       this.messages = messages;
       this.scrollMessages();
-    })
+    });
+
+    socket.emit('authorization', {
+      accessToken: 'tst'
+    });
 
   }
 

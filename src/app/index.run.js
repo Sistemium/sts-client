@@ -1,4 +1,4 @@
 export function runBlock ($log) {
   'ngInject';
-  $log.debug('runBlock end');
+  $log.debug('sts client start');
 }
