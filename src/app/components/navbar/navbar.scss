@@ -1,0 +1,34 @@
+#main-navbar {
+
+  .navbar-text {
+    color: white;
+    margin-right: 0;
+  }
+
+  h1 {
+    font-size: 2em;
+    margin: 0;
+    line-height: 1.25em;
+  }
+
+  a:hover, a:focus {
+    color: greenyellow;
+  }
+
+
+  li.active a {
+    background-color: #222222;
+  }
+
+
+  margin-top: 10px;
+  border-radius: 6px;
+
+  background-color: darken(teal, 14%);
+
+  span + span {
+    margin-left: 7px;
+  }
+
+}
+
