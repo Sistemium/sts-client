@@ -1,4 +1,4 @@
-import {v4} from 'uuid';
+import _ from 'lodash';
 
 export class MainController {
 

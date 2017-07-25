@@ -1,6 +1,8 @@
 const SCREEN_XS_MAX = 768;
 const SCREEN_SM_MIN = 480;
 
+import _ from 'lodash';
+
 export function ResizeDirective($window, $uibPosition, $timeout) {
   'ngInject';
 
