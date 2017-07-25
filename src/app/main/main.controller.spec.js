@@ -29,4 +29,5 @@ describe('controllers', () => {
     expect(angular.isArray(vm.awesomeThings)).toBeTruthy();
     expect(vm.awesomeThings.length === 5).toBeTruthy();
   });
+
 });

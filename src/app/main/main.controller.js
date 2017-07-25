@@ -2,65 +2,37 @@ import _ from 'lodash';
 
 export class MainController {
 
-  constructor(toastr, socket, $window, $timeout, localStorageService) {
+  constructor(socket) {
     'ngInject';
 
-    this.toastr = toastr;
-    this.messageText = null;
-    this.socket = socket;
-    this.messages = [];
-    this.$timeout = $timeout;
-    this.scroller = $window.document.getElementById('messages');
-
-    this.userId = localStorageService.get('userId');
-
-    if (!this.userId) {
-      this.userId =  v4();
-      localStorageService.set('userId', this.userId);
-    }
-
-    socket.on('message', message => {
-      this.addMessage(message);
-      toastr.info(message.text, `From: ${message.from}`);
-    });
-
-    socket.on('welcome', messages => {
-      socket.emit('setUser', this.userId);
-      this.messages = messages;
-      this.scrollMessages();
-    });
+    // this.socket = socket;
+    // this.sessions = [];
 
     socket.emit('authorization', {
-      accessToken: 'tst'
+      accessToken: '75b6851354d3498031a587daeecd09ef@pha'
     });
 
-  }
-
-  onSubmit() {
-
-    let text = this.messageText;
-
-    if (!text) return;
-
-    this.messageText = '';
-
-    this.socket.emit('post', text, message => {
-      this.addMessage(message);
+    socket.emit('session:state:findAll', response => {
+      this.sessions = response.data;
     });
 
-  }
+    socket.emit('session:state:register');
 
-  addMessage(message) {
-    this.messages.splice(0, 0, message);
-    while (this.messages.length > 50) {
-      this.messages.pop()
-    }
-    this.scrollMessages();
-  }
+    socket.on('session:state', sessionData => {
 
-  scrollMessages() {
-    this.$timeout(10)
-      .then(() => this.scroller.scrollTop = this.scroller.scrollHeight);
+      let {id} = sessionData;
+      _.remove(this.sessions, {id});
+      this.sessions.push(sessionData);
+
+    });
+
+    socket.on('session:state:destroy', id => {
+
+      let session = _.find(this.sessions, {id});
+      _.set(session, 'destroyed', true);
+
+    });
+
   }
 
 }

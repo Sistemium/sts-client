@@ -1,34 +1,8 @@
 .container.main
 
-  //acme-navbar(creation-date='vm.creationDate')
-
-  .jumbotron.text-center
-    h1 Welcome to the Junk&nbsp;Place!
-
-    p.lead
-      //img(src='assets/images/yeoman.png', alt="I'm Yeoman")
-      //br
-      span A decent spot for worthless talks
-
-  .messages#messages(resize resize-offset-top='65')
-    .message(
-    ng-attr-id='{{ message.id }}'
-    ng-repeat='message in vm.messages | orderBy:"date" track by message.id'
-    ng-class='{own: message.authorId === vm.userId }'
+  ul.list-group()
+    li.list-group-item(
+    ng-repeat='session in vm.sessions | orderBy: "-ts" track by session.id',
+    ng-class='{ disabled: session.destroyed }'
     )
-      .from from {{ message.authorId === vm.userId ? 'me' : message.from }} {{ message.date | amCalendar }}
-      .text {{ message.text }}
-
-  form(ng-submit='vm.onSubmit()' name='messageForm')
-
-    input#message.form-control(
-    autocomplete="off"
-    type="text"
-    placeholder="Message text"
-    ng-model='vm.messageText'
-    required
-    autofocus
-    min-length='1'
-    )
-
-    button.btn.btn-primary(type="submit" ng-disabled='messageForm.$invalid') Send
+      pre {{ session | json }}
