@@ -12,12 +12,20 @@ export class DetailController {
 
         let session = sessionData.find($state.params.sessionId);
 
-        if (!session) {
-          this.goBack();
-        }
-
         return _.toPairs(session)
       }
+    });
+
+    rootScope.$on('initialSessions', () => {
+
+      this.tableParams.reload();
+
+      let session = sessionData.find($state.params.sessionId);
+
+      if (!session) {
+        this.goBack();
+      }
+
     });
 
     rootScope.$on('receivedSession', () => {
