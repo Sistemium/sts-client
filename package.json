@@ -5,7 +5,9 @@
   "repository": "https://github.com/JunkPlace/junk-place",
   "license": "MIT",
   "dependencies": {
+    "angular": "^1.5.3",
     "lodash": "^4.17.4",
+    "ng-table": "^3.0.1",
     "socket.io-client": "^2.0.1",
     "uuid": "^3.0.1"
   },
