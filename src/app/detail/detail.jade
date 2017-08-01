@@ -1,0 +1,25 @@
+a(href ng-click='vm.goBack()') Go back
+
+.detail
+
+  table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+
+    thead
+
+      tr(
+      ng-repeat='detail in $data'
+      )
+
+    tr(
+    ng-repeat='detail in $data'
+    )
+      td.value(
+      ng-repeat='value in detail'
+      )
+        a(
+        href
+        ng-class='{ disabled: !vm.presentObject(value) }'
+        uib-popover-template='"app/components/showObject/showObject.html"'
+        popover-trigger="'outsideClick'"
+        popover-placement="bottom auto"
+        ) {{ value | reduceObject}}
