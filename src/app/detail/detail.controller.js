@@ -12,7 +12,7 @@ export class DetailController {
 
         let session = sessionData.find($state.params.sessionId);
 
-        return _.toPairs(session)
+        return session
       }
     });
 

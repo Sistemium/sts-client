@@ -7,15 +7,16 @@ a(href ng-click='vm.goBack()') Go back
     thead
 
       tr(
-      ng-repeat='detail in $data'
+      ng-repeat='(key, val) in $data'
       )
 
     tr(
-    ng-repeat='detail in $data'
+    ng-repeat='(key, value) in $data'
     )
-      td.value(
-      ng-repeat='value in detail'
-      )
+
+      td.key {{ key}}
+
+      td.value
         a(
         href
         ng-class='{ disabled: !vm.presentObject(value) }'
