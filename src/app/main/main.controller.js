@@ -1,37 +1,31 @@
-import _ from 'lodash';
-
 export class MainController {
 
-  constructor(socket) {
+  constructor($scope, sessionData, NgTableParams, $state) {
     'ngInject';
 
-    // this.socket = socket;
-    // this.sessions = [];
+    $scope.$on('initialSessions', () => {
 
-    socket.emit('authorization', {
-      accessToken: '75b6851354d3498031a587daeecd09ef@pha'
-    });
-
-    socket.emit('session:state:findAll', response => {
-      this.sessions = response.data;
-    });
-
-    socket.emit('session:state:register');
-
-    socket.on('session:state', sessionData => {
-
-      let {id} = sessionData;
-      _.remove(this.sessions, {id});
-      this.sessions.push(sessionData);
+      this.tableParams = new NgTableParams({}, {dataset: sessionData.findAll()});
 
     });
 
-    socket.on('session:state:destroy', id => {
+    $scope.$on('receivedSession', () => {
 
-      let session = _.find(this.sessions, {id});
-      _.set(session, 'destroyed', true);
+      this.tableParams.reload();
 
     });
+
+    $scope.$on('destroyedSession', () => {
+
+      this.tableParams.reload();
+
+    });
+
+    this.showDetails = (sessionId) => {
+
+      $state.go('sessions.detail', {sessionId});
+
+    }
 
   }
 

@@ -6,4 +6,8 @@ $black: #333333;
 
   padding: $padding;
 
+  tr.disabled {
+    color: gray;
+  }
+
 }

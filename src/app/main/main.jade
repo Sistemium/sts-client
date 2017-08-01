@@ -1,8 +1,22 @@
-.container.main
+.container.main(ui-view)
 
-  ul.list-group()
-    li.list-group-item(
-    ng-repeat='session in vm.sessions | orderBy: "-ts" track by session.id',
+  //ul.list-group()
+  //  li.list-group-item(
+  //  ng-repeat='session in vm.sessions | orderBy: "-ts" track by session.id',
+  //  ng-class='{ disabled: session.destroyed }'
+  //  )
+  //    pre {{ session | json }}
+
+  table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+
+    tr(
+    ng-repeat='session in $data'
     ng-class='{ disabled: session.destroyed }'
+    ng-click="vm.showDetails(session.id)"
     )
-      pre {{ session | json }}
+      td(data-title="'ID'" sortable="'id'")
+        | {{ session.id }}
+      td(data-title="'User Agent'" sortable="'userAgent'")
+        | {{ session.userAgent}}
+      td(data-title="'CTS'" sortable="'cts'")
+        | {{ session.cts | amCalendar }}

@@ -4,7 +4,10 @@ import {config, localStorageConfig} from './index.config';
 import {routerConfig} from './index.route';
 import {runBlock} from './index.run';
 import {MainController} from './main/main.controller';
+import {sessionData} from '../app/services/sessionData';
 import io from 'socket.io-client';
+
+require('ng-table');
 
 angular.module('stsClient', [
   'ngAnimate',
@@ -26,6 +29,6 @@ angular.module('stsClient', [
   .config(routerConfig)
   .run(runBlock)
   .controller('MainController', MainController)
-
   .factory('socket', socketFactory => socketFactory({ioSocket: io.connect()}))
+  .factory('sessionData', sessionData)
 ;
