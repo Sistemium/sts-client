@@ -2,12 +2,34 @@ $black: #333333;
 
 .main {
 
-  $padding: 15px;
-
-  padding: $padding;
+  padding-left: 0;
+  margin-left: 0;
 
   tr.disabled {
     color: gray;
   }
 
+  display: flex;
+  flex-direction: row;
+
+  .nav{
+
+    flex: 0 0 15%;
+    border-right: 1px solid black;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+  }
+
+  .detail{
+
+  }
+
+}
+
+.container{
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }

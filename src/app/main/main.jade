@@ -1,4 +1,4 @@
-.container.main(ui-view)
+.container.main
 
   //ul.list-group()
   //  li.list-group-item(
@@ -7,16 +7,20 @@
   //  )
   //    pre {{ session | json }}
 
-  table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+  .nav.scroll
 
-    tr(
-    ng-repeat='session in $data'
-    ng-class='{ disabled: session.destroyed }'
-    ng-click="vm.showDetails(session.id)"
-    )
-      td(data-title="'ID'" sortable="'id'")
-        | {{ session.id }}
-      td(data-title="'User Agent'" sortable="'userAgent'")
-        | {{ session.userAgent}}
-      td(data-title="'CTS'" sortable="'cts'")
-        | {{ session.cts | amCalendar }}
+    table.table(ng-table="vm.tableParams" class="table")
+
+      tr(
+      ng-repeat='session in $data'
+      ng-class='{ disabled: session.destroyed }'
+      ng-click="vm.showDetails(session.id)"
+      )
+        //td(data-title="'ID'" sortable="'id'")
+        //  | {{ session.id }}
+        td(data-title="'User Agent'" sortable="'userAgent'")
+          | {{ session.userAgent}}
+        //td(data-title="'CTS'" sortable="'cts'")
+        //  | {{ session.cts | amCalendar }}
+
+  .detail(ui-view)
