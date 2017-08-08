@@ -1,0 +1,4 @@
+div(ui-tree-handle='')
+  | {{node.label}}
+ol(ui-tree-nodes='' ng-model='node.children')
+  li(ng-repeat='node in node.children' ui-tree-node='' ng-include="'app/detail/nodes_renderer.html'")

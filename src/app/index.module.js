@@ -24,7 +24,8 @@ angular.module('stsClient', [
   'btford.socket-io',
   'angularMoment',
   'LocalStorageModule',
-  'ngTable'
+  'ngTable',
+  'ui.tree'
 ])
   .config(config)
   .config(localStorageConfig)

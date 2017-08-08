@@ -1,24 +1,36 @@
 .detail
 
-  table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+  uib-tabset
 
-    thead
+    uib-tab(heading="Info")
 
-      tr(
-      ng-repeat='(key, val) in $data'
-      )
+      table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
 
-    tr(
-    ng-repeat='(key, value) in $data'
-    )
+        thead
 
-      td.key {{ key }}
+          tr(
+          ng-repeat='(key, val) in $data'
+          )
 
-      td.value
-        a(
-        href
-        ng-class='{ disabled: !vm.presentObject(value) }'
-        uib-popover-template='"app/components/showObject/showObject.html"'
-        popover-trigger="'outsideClick'"
-        popover-placement="bottom auto"
-        ) {{ value | reduceObject }}
+        tr(
+        ng-repeat='(key, value) in $data'
+        )
+
+          td.key {{ key }}
+
+          td.value
+            a(
+            href
+            ng-class='{ disabled: !vm.presentObject(value) }'
+            uib-popover-template='"app/components/showObject/showObject.html"'
+            popover-trigger="'outsideClick'"
+            popover-placement="bottom auto"
+            ) {{ value | reduceObject }}
+
+    uib-tab(heading="Files" disable="!vm.isDevice()" ng-click="vm.getFileList()")
+
+      div(ui-tree='' data-drag-enabled="false")
+        ol#tree-root(ui-tree-nodes='', ng-model='vm.list')
+          li(ng-repeat='node in vm.list', ui-tree-node='', ng-include="'app/detail/nodes_renderer.html'")
+
+

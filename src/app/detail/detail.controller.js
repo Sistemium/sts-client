@@ -10,9 +10,9 @@ export class DetailController {
     this.tableParams = new NgTableParams({}, {
       getData: () => {
 
-        let session = sessionData.find($state.params.sessionId);
+        this.session = sessionData.find($state.params.sessionId);
 
-        return session
+        return this.session
       }
     });
 
@@ -20,9 +20,7 @@ export class DetailController {
 
       this.tableParams.reload();
 
-      let session = sessionData.find($state.params.sessionId);
-
-      if (!session) {
+      if (!this.session) {
         this.goBack();
       }
 
@@ -47,6 +45,46 @@ export class DetailController {
     this.presentObject = (param) => {
       return _.isObject(param);
     };
+
+    this.isDevice = () => {
+
+      return _.get(this.session,"deviceInfo");
+
+    };
+
+    this.getFileList = () => {
+
+      let UUID = _.get(this.session,"deviceUUID");
+
+      if (!UUID) return;
+
+      sessionData.getDeviceFiles(UUID).then(response =>{
+        this.list = fileMap(response);
+      });
+
+    };
+
+    this.list = [
+    ];
+
+    function fileMap(object) {
+
+      let result = [];
+
+      _.forOwn(object,(value,key)=>{
+
+        result.push({
+          label:key,
+          children:_.isObject(value) ? fileMap(value) : {
+            label:value
+          }
+        });
+
+      });
+
+      return result;
+
+    }
 
   }
 
