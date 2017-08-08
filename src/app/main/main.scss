@@ -12,17 +12,12 @@ $black: #333333;
   display: flex;
   flex-direction: row;
 
-  .nav{
+  .menu{
 
     flex: 0 0 15%;
     border-right: 1px solid black;
-
     overflow-y: scroll;
     overflow-x: hidden;
-
-  }
-
-  .detail{
 
   }
 

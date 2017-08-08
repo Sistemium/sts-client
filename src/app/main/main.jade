@@ -7,7 +7,7 @@
   //  )
   //    pre {{ session | json }}
 
-  .nav.scroll
+  .menu
 
     table.table(ng-table="vm.tableParams" class="table")
 
@@ -23,4 +23,5 @@
         //td(data-title="'CTS'" sortable="'cts'")
         //  | {{ session.cts | amCalendar }}
 
-  .detail(ui-view)
+  ui-view
+
