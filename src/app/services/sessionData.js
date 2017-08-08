@@ -4,7 +4,7 @@
 
 import _ from 'lodash';
 
-export function sessionData(socket, $rootScope) {
+export function sessionData(socket, $rootScope, $q) {
 
   'ngInject';
 
@@ -46,6 +46,29 @@ export function sessionData(socket, $rootScope) {
     find: (id) => {
 
       return _.find(this.sessions, {id});
+
+    },
+
+    getDeviceFiles: (deviceUUID) => {
+
+      let deferred = $q.defer();
+
+      let request = {
+
+        "STMCoreSessionFiler": {
+          "JSONOfFilesAtPath:": "/"
+        }
+
+      };
+
+      socket.emit('device:pushRequest', deviceUUID, request, response => {
+
+        deferred.resolve(_.get(response,"STMCoreSessionFiler.JSONOfFilesAtPath:"));
+        // deferred.resolve(response);
+
+      });
+
+      return deferred.promise;
 
     }
 
