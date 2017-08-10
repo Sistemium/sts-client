@@ -54,6 +54,8 @@ export class DetailController {
 
     this.getFileList = () => {
 
+      this.list = [];
+
       let UUID = _.get(this.session,"deviceUUID");
 
       if (!UUID) return;
@@ -64,9 +66,6 @@ export class DetailController {
 
     };
 
-    this.list = [
-    ];
-
     function fileMap(object) {
 
       let result = [];
@@ -75,9 +74,9 @@ export class DetailController {
 
         result.push({
           label:key,
-          children:_.isObject(value) ? fileMap(value) : {
+          children:_.isObject(value) ? fileMap(value) : [{
             label:value
-          }
+          }]
         });
 
       });
