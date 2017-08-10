@@ -29,8 +29,6 @@
 
     uib-tab(heading="Files" disable="!vm.isDevice()" ng-click="vm.getFileList()")
 
-      div(ui-tree='' data-drag-enabled="false")
+      .tree(ui-tree='' data-drag-enabled="false" data-empty-placeholder-enabled="false")
         ol#tree-root(ui-tree-nodes='', ng-model='vm.list')
-          li(ng-repeat='node in vm.list', ui-tree-node='', ng-include="'app/detail/nodes_renderer.html'")
-
-
+          li(ng-repeat='node in vm.list', ui-tree-node='', ng-include="'app/detail/parent_items_renderer.html'")
