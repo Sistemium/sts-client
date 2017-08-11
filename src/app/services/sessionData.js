@@ -43,13 +43,13 @@ export function sessionData(socket, $rootScope, $q) {
 
     },
 
-    find: (id) => {
+    find: id => {
 
       return _.find(this.sessions, {id});
 
     },
 
-    getDeviceFiles: (deviceUUID) => {
+    getDeviceFiles: deviceUUID => {
 
       let deferred = $q.defer();
 
@@ -63,8 +63,7 @@ export function sessionData(socket, $rootScope, $q) {
 
       socket.emit('device:pushRequest', deviceUUID, request, response => {
 
-        deferred.resolve(_.get(response,"STMCoreSessionFiler.JSONOfFilesAtPath:"));
-        // deferred.resolve(response);
+        deferred.resolve(_.get(response, "STMCoreSessionFiler.JSONOfFilesAtPath:"));
 
       });
 

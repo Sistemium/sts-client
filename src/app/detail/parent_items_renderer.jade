@@ -1,12 +1,6 @@
-//div(ui-tree-handle='')
-//  | {{node.label}}
-//ol(ui-tree-nodes='' ng-model='node.label')
-//  li(ng-repeat='node in node.children' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")
-
-
 .tree-node.tree-node-content(ui-tree-handle='')
   a(href='')
-    div(ng-if='node.children', data-nodrag='', ng-click='toggle(this)')
+    div(data-nodrag='' ng-click='toggle(this)')
       span.glyphicon(ng-class="{\
       'glyphicon-chevron-right closed': collapsed,\
       'glyphicon-chevron-down open': !collapsed}")

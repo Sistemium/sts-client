@@ -2,17 +2,18 @@ import _ from 'lodash';
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionData, NgTableParams) {
+  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig) {
     'ngInject';
 
     let rootScope = $rootScope;
+    treeConfig.defaultCollapsed = true;
 
     this.tableParams = new NgTableParams({}, {
       getData: () => {
 
         this.session = sessionData.find($state.params.sessionId);
 
-        return this.session
+        return this.session;
       }
     });
 
@@ -48,7 +49,7 @@ export class DetailController {
 
     this.isDevice = () => {
 
-      return _.get(this.session,"deviceInfo");
+      return _.get(this.session, "deviceInfo");
 
     };
 
@@ -56,7 +57,7 @@ export class DetailController {
 
       this.list = [];
 
-      let UUID = _.get(this.session,"deviceUUID");
+      let UUID = _.get(this.session, "deviceUUID");
 
       if (!UUID) return;
 
