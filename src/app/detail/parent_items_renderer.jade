@@ -5,6 +5,6 @@
       'glyphicon-chevron-right closed': collapsed,\
       'glyphicon-chevron-down open': !collapsed}")
       span(ng-bind-html='node.label')  {{node.label}}
-ul(ui-tree-nodes='', ng-model='node.children', ng-class='{hidden: collapsed}')
-  li(ng-repeat='node in node.children', ui-tree-node='', ng-init='collapse()', ng-include="node.children ? 'app/detail/parent_items_renderer.html' :  'app/detail/terminal_item_renderer.html' ")
+ul(ui-tree-nodes='' ng-model='node.children' ng-if="!collapsed")
+  li(ng-repeat='node in node.children' ui-tree-node='' ng-include="node.children ? 'app/detail/parent_items_renderer.html' :  'app/detail/terminal_item_renderer.html' ")
 
