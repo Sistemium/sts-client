@@ -30,5 +30,11 @@
     uib-tab(heading="Files" disable="!vm.isDevice()" ng-click="vm.getFileList()")
 
       .tree(ui-tree='' data-drag-enabled="false" data-empty-placeholder-enabled="false")
-        ol#tree-root(ui-tree-nodes='', ng-model='vm.list')
-          li(ng-repeat='node in vm.list', ui-tree-node='', ng-include="'app/detail/parent_items_renderer.html'")
+        ol(ui-tree-nodes='' ng-model='vm.files')
+          li(ng-repeat='node in vm.files', ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")
+
+    uib-tab(heading="Data" disable="!vm.isDevice()" ng-click="vm.getDataList()")
+
+      .tree(ui-tree='' data-drag-enabled="false" data-empty-placeholder-enabled="false")
+        ol(ui-tree-nodes='' ng-model='vm.data')
+          li(ng-repeat='node in vm.data' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'" ng-click="vm.getEntity(node)")

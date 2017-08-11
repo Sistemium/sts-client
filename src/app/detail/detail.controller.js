@@ -55,30 +55,85 @@ export class DetailController {
 
     this.getFileList = () => {
 
-      this.list = [];
+      this.files = [];
 
       let UUID = _.get(this.session, "deviceUUID");
 
       if (!UUID) return;
 
-      sessionData.getDeviceFiles(UUID).then(response =>{
-        this.list = fileMap(response);
+      sessionData.getDeviceFiles(UUID).then(response => {
+
+        let fileMapCallback = (key, value) => {
+
+          return _.isObject(value) ? {
+            label: key,
+            children: mapKeyValue(value, fileMapCallback)
+          } : {label: key + ": " + value}
+
+        };
+
+        this.files = mapKeyValue(response, fileMapCallback);
+
       });
 
     };
 
-    function fileMap(object) {
+    this.getDataList = () => {
+
+      this.data = [];
+
+      let UUID = _.get(this.session, "deviceUUID");
+
+      if (!UUID) return;
+
+      sessionData.getDeviceData(UUID).then(response => {
+
+        this.data = _.map(response, entity => {
+          return {
+            label: entity.name
+          }
+        });
+
+      });
+
+    };
+
+    this.getEntity = entityNode => {
+
+      if (entityNode.lazyLoaded) {
+        return;
+      }
+
+      let UUID = _.get(this.session, "deviceUUID");
+
+      if (!UUID) return;
+
+      sessionData.getEntityData(UUID, entityNode.label).then(response => {
+
+        entityNode.children = _.map(response, object => {
+          return {
+            label: object.id,
+            children: mapKeyValue(object, (key, value) => {
+              return {
+                label: key + ": " + value
+              }
+            })
+          };
+        });
+
+        entityNode.lazyLoaded = true;
+
+      });
+
+    };
+
+    function mapKeyValue(object, callback) {
 
       let result = [];
 
-      _.forOwn(object,(value,key)=>{
+      _.forOwn(object, (value, key) => {
 
-        result.push({
-          label:key,
-          children:_.isObject(value) ? fileMap(value) : [{
-            label:value
-          }]
-        });
+        result.push(callback(key, value));
 
       });
 

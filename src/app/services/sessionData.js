@@ -69,6 +69,50 @@ export function sessionData(socket, $rootScope, $q) {
 
       return deferred.promise;
 
+    },
+
+    getDeviceData: deviceUUID => {
+
+      let deferred = $q.defer();
+
+      let request = {
+        "STMRemotePersisterController": {
+          "findAllRemote:": {
+            "entityName": "STMEntity"
+          }
+        }
+      };
+
+      socket.emit('device:pushRequest', deviceUUID, request, response => {
+
+        deferred.resolve(_.get(response, "STMRemotePersisterController.findAllRemote:"));
+
+      });
+
+      return deferred.promise;
+
+    },
+
+    getEntityData: (deviceUUID, entityName) => {
+
+      let deferred = $q.defer();
+
+      let request = {
+        "STMRemotePersisterController": {
+          "findAllRemote:": {
+            "entityName": entityName
+          }
+        }
+      };
+
+      socket.emit('device:pushRequest', deviceUUID, request, response => {
+
+        deferred.resolve(_.get(response, "STMRemotePersisterController.findAllRemote:"));
+
+      });
+
+      return deferred.promise;
+
     }
 
   }
