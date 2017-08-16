@@ -4,12 +4,18 @@
 
 import _ from 'lodash';
 
-export function sessionData(socket, $rootScope, $q) {
+export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
 
   'ngInject';
 
+  const authorization = localStorageService.get('authorization');
+
+  if (!authorization) {
+    return $log.error('authorization item is not set');
+  }
+
   socket.emit('authorization', {
-    accessToken: '75b6851354d3498031a587daeecd09ef@pha'
+    accessToken: authorization
   });
 
   socket.emit('session:state:findAll', response => {

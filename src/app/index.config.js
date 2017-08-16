@@ -1,4 +1,4 @@
-export function config ($logProvider, toastrConfig) {
+export function config($logProvider, toastrConfig) {
   'ngInject';
   // Enable log
   $logProvider.debugEnabled(true);
@@ -13,5 +13,24 @@ export function config ($logProvider, toastrConfig) {
 
 export function localStorageConfig(localStorageServiceProvider) {
   'ngInject';
-   localStorageServiceProvider.setPrefix('junk');
+  localStorageServiceProvider.setPrefix('junk');
+}
+
+const cgBusyDefaults = {
+  message: 'Loading ...',
+  //backdrop: false,
+  //templateUrl: 'my_custom_template.html',
+  delay: 100,
+  minDuration: 200,
+  wrapperClass: 'my-class my-class2'
+};
+
+export {cgBusyDefaults};
+
+export function localStorageServiceConfig (localStorageServiceProvider) {
+  'ngInject';
+  localStorageServiceProvider
+    // .setStorageType('sessionStorage')
+    // .setNotify(true, true)
+    .setPrefix('sts');
 }
