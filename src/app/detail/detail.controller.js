@@ -61,7 +61,8 @@ export class DetailController {
 
       if (!UUID) return;
 
-      sessionData.getDeviceFiles(UUID).then(response => {
+      this.busy = sessionData.getDeviceFiles(UUID)
+        .then(response => {
 
         let fileMapCallback = (key, value) => {
 
@@ -86,7 +87,7 @@ export class DetailController {
 
       if (!UUID) return;
 
-      sessionData.getDeviceData(UUID).then(response => {
+      this.busy = sessionData.getDeviceData(UUID).then(response => {
 
         this.data = _.map(response, entity => {
           return {
@@ -108,7 +109,7 @@ export class DetailController {
 
       if (!UUID) return;
 
-      sessionData.getEntityData(UUID, entityNode.label).then(response => {
+      this.busy = sessionData.getEntityData(UUID, entityNode.label).then(response => {
 
         entityNode.children = _.map(response, object => {
           return {
