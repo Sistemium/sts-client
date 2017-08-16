@@ -8,6 +8,7 @@ import {DetailController} from './detail/detail.controller';
 import {sessionData} from '../app/services/sessionData';
 import io from 'socket.io-client';
 import {reduceObject} from './filters/reduceObject';
+import {ResizeDirective} from '../app/components/resize.directive';
 
 require('ng-table');
 require('angular-local-storage');
@@ -40,5 +41,6 @@ angular.module('stsClient', [
   .factory('socket', socketFactory => socketFactory({ioSocket: io.connect()}))
   .factory('sessionData', sessionData)
   .filter('reduceObject', reduceObject)
+  .directive('resize', ResizeDirective)
   .value('cgBusyDefaults', cgBusyDefaults)
 ;

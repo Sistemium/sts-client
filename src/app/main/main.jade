@@ -11,14 +11,8 @@
 
     table.table(ng-table="vm.tableParams" class="table")
 
-      thead
-
-        //tr User Agent
-
-      input(ng-model="searchText")
-
       tr(
-      ng-repeat="session in $data | filter:searchText"
+      ng-repeat="session in $data"
       ng-class='{ disabled: session.destroyed }'
       ng-click="vm.showDetails(session.id)"
       )

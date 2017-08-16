@@ -64,18 +64,18 @@ export class DetailController {
       this.busy = sessionData.getDeviceFiles(UUID)
         .then(response => {
 
-        let fileMapCallback = (key, value) => {
+          let fileMapCallback = (key, value) => {
 
-          return _.isObject(value) ? {
-            label: key,
-            children: mapKeyValue(value, fileMapCallback)
-          } : {label: key + ": " + value}
+            return _.isObject(value) ? {
+              label: key,
+              children: mapKeyValue(value, fileMapCallback)
+            } : {label: key + ": " + value}
 
-        };
+          };
 
-        this.files = mapKeyValue(response, fileMapCallback);
+          this.files = mapKeyValue(response, fileMapCallback);
 
-      });
+        });
 
     };
 

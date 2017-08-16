@@ -1,4 +1,4 @@
-.detail
+.detail(cg-busy='vm.busy')
 
   uib-tabset
 
@@ -7,10 +7,6 @@
       table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
 
         thead
-
-          tr(
-          ng-repeat='(key, val) in $data'
-          )
 
         tr(
         ng-repeat='(key, value) in $data'
@@ -27,14 +23,28 @@
             popover-placement="bottom auto"
             ) {{ value | reduceObject }}
 
-    uib-tab(heading="Files" disable="!vm.isDevice()" ng-click="vm.getFileList()")
+    uib-tab(
+    heading="Files"
+    disable="!vm.isDevice() || vm.session.destroyed"
+    ng-click="vm.isDevice() && !vm.session.destroyed && vm.getFileList()"
+    )
 
-      .tree(ui-tree='' data-drag-enabled="false" data-empty-placeholder-enabled="false")
+      .tree.scroll-y(
+      ui-tree data-drag-enabled="false" data-empty-placeholder-enabled="false"
+      resize resize-offset-top='10'
+      )
         ol(ui-tree-nodes='' ng-model='vm.files')
           li(ng-repeat='node in vm.files', ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")
 
-    uib-tab(heading="Data" disable="!vm.isDevice()" ng-click="vm.getDataList()")
+    uib-tab(
+    heading="Data"
+    disable="!vm.isDevice() || vm.session.destroyed"
+    ng-click="vm.isDevice() && !vm.session.destroyed && vm.getDataList()"
+    )
 
-      .tree(ui-tree='' data-drag-enabled="false" data-empty-placeholder-enabled="false")
+      .tree.scroll-y(
+      ui-tree data-drag-enabled="false" data-empty-placeholder-enabled="false"
+      resize resize-offset-top='10'
+      )
         ol(ui-tree-nodes='' ng-model='vm.data')
           li(ng-repeat='node in vm.data' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'" ng-click="vm.getEntity(node)")
