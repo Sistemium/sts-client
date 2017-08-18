@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export class MainController {
 
   constructor($scope, sessionData, NgTableParams, $state) {
@@ -25,7 +27,11 @@ export class MainController {
 
       $state.go('sessions.detail', {sessionId});
 
-    }
+    };
+
+    this.split = function(string) {
+      return _.first(string.split(' '));
+    };
 
   }
 
