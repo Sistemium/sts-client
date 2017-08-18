@@ -5,7 +5,7 @@ export class MainController {
 
     $scope.$on('initialSessions', () => {
 
-      this.tableParams = new NgTableParams({}, {dataset: sessionData.findAll()});
+      this.tableParams = new NgTableParams({}, {getData: sessionData.findAll});
 
     });
 
