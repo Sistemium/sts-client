@@ -16,28 +16,37 @@ export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
 
   socket.emit('authorization', {
     accessToken: authorization
-  });
+  }, response => {
 
-  socket.emit('session:state:findAll', response => {
-    this.sessions = response.data;
-    $rootScope.$broadcast('initialSessions');
-  });
+    if (_.get(response, "isAuthorized")) {
+      $log.log("Authorized: " + response.isAuthorized)
+    }
+    if (_.get(response, "error")) {
+      $log.error(response.error);
+    }
 
-  socket.emit('session:state:register');
+    socket.emit('session:state:findAll', response => {
+      this.sessions = response.data;
+      $rootScope.$broadcast('initialSessions');
+    });
 
-  socket.on('session:state', sessionData => {
+    socket.emit('session:state:register');
 
-    let {id} = sessionData;
-    _.remove(this.sessions, {id});
-    this.sessions.push(sessionData);
-    $rootScope.$broadcast('receivedSession');
-  });
+    socket.on('session:state', sessionData => {
 
-  socket.on('session:state:destroy', id => {
+      let {id} = sessionData;
+      _.remove(this.sessions, {id});
+      this.sessions.push(sessionData);
+      $rootScope.$broadcast('receivedSession');
+    });
 
-    let session = _.find(this.sessions, {id});
-    _.set(session, 'destroyed', true);
-    $rootScope.$broadcast('destroyedSession');
+    socket.on('session:state:destroy', id => {
+
+      let session = _.find(this.sessions, {id});
+      _.set(session, 'destroyed', true);
+      $rootScope.$broadcast('destroyedSession');
+
+    });
 
   });
 
