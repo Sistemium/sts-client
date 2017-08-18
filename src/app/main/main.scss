@@ -16,8 +16,12 @@ $black: #333333;
 
     flex: 0 0 15%;
     border-right: 1px solid black;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    //overflow-y: scroll;
+    //overflow-x: hidden;
+    .center{
+      text-align: center;
+      font-weight: bold;
+    }
 
   }
 

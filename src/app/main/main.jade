@@ -9,15 +9,23 @@
 
   .menu
 
-    table.table(ng-table="vm.tableParams" class="table")
+    h5.center User Agent
 
-      tr(
-      ng-repeat="session in $data"
-      ng-class='{ disabled: session.destroyed }'
-      ng-click="vm.showDetails(session.id)"
-      )
-        td(data-title="'User Agent'")
-          | {{ session.userAgent}}
+    input.form-control(ng-model="searchText")
+
+    .scroll-y(resize resize-offset-top='0')
+
+      table.table(ng-table="vm.tableParams" class="table")
+
+        thead
+
+        tr(
+        ng-repeat="session in $data | filter:searchText"
+        ng-class='{ disabled: session.destroyed }'
+        ng-click="vm.showDetails(session.id)"
+        )
+          td(data-title="'User Agent'")
+           | {{ session.userAgent}}
 
   ui-view.sideView
 
