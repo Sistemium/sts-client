@@ -10,6 +10,7 @@
 
         tr(
         ng-repeat='(key, value) in $data'
+        ng-if="key != 'visibleColumnCount'"
         )
 
           td.key {{ key }}
