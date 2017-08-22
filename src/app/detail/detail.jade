@@ -26,8 +26,8 @@
 
     uib-tab(
     heading="Files"
-    disable="!vm.isDevice() || vm.session.destroyed"
-    ng-click="vm.isDevice() && !vm.session.destroyed && vm.getFileList()"
+    disable="!vm.minBuild(341) || vm.session.destroyed"
+    ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getFileList()"
     )
 
       .tree.scroll-y(
@@ -39,8 +39,8 @@
 
     uib-tab(
     heading="Data"
-    disable="!vm.isDevice() || vm.session.destroyed"
-    ng-click="vm.isDevice() && !vm.session.destroyed && vm.getDataList()"
+    disable="!vm.minBuild(341) || vm.session.destroyed"
+    ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getDataList()"
     )
 
       .tree.scroll-y(

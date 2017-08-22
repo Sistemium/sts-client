@@ -47,9 +47,9 @@ export class DetailController {
       return _.isObject(param);
     };
 
-    this.isDevice = () => {
+    this.minBuild = build => {
 
-      return _.get(this.session, "deviceInfo");
+      return Number(_.last(_.get(this.session, "userAgent", "").split('/').slice(0, 2))) >= build;
 
     };
 
