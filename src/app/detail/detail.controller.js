@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig) {
+  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr) {
     'ngInject';
 
     let rootScope = $rootScope;
@@ -27,9 +27,11 @@ export class DetailController {
 
                 if (response) {
 
+                  toastr.success("Successful sync", "Full Sync");
 
                 } else {
 
+                  toastr.error("Unsuccessful sync", "Full Sync");
 
                 }
 
