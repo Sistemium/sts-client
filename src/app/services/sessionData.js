@@ -128,6 +128,24 @@ export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
 
       return deferred.promise;
 
+    },
+
+    fullSync: deviceUUID => {
+
+      let deferred = $q.defer();
+
+      let command = {
+        "STMSyncer": "fullSync"
+      };
+
+      socket.emit('device:pushCommand', deviceUUID, command, response => {
+
+        deferred.resolve(response);
+
+      });
+
+      return deferred.promise;
+
     }
 
   }

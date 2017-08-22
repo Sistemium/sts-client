@@ -10,7 +10,7 @@
 
         tr(
         ng-repeat='(key, value) in $data'
-        ng-if="key != 'visibleColumnCount'"
+        ng-if="key != 'visibleColumnCount' && key != 'commands'"
         )
 
           td.key {{ key }}
@@ -23,6 +23,21 @@
             popover-trigger="'outsideClick'"
             popover-placement="bottom auto"
             ) {{ value | reduceObject }}
+
+        tr(
+        ng-repeat='(key, value) in $data'
+        ng-if="key == 'commands'"
+        )
+
+          td.key {{ key }}
+
+          td.value
+
+            span(ng-repeat='b in value')
+
+              button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="b.action()") {{ b.buttonName }}
+
+
 
     uib-tab(
     heading="Files"

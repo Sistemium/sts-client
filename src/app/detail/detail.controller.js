@@ -13,6 +13,32 @@ export class DetailController {
 
         this.session = sessionData.find($state.params.sessionId);
 
+        if (_.get(this.session, 'deviceInfo')) {
+
+          _.set(this.session, 'commands', [{
+            buttonName: "Full Sync",
+            action: () => {
+
+              let UUID = _.get(this.session, "deviceUUID");
+
+              if (!UUID) return;
+
+              this.busy = sessionData.fullSync(UUID).then(response => {
+
+                if (response) {
+
+
+                } else {
+
+
+                }
+
+              });
+            }
+          }]);
+
+        }
+
         return this.session;
       }
     });
