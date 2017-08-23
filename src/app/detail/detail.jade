@@ -57,7 +57,7 @@
     uib-tab(
     heading="Data"
     disable="!vm.minBuild(341) || vm.session.destroyed"
-    ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getDataList()"
+    ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getEntityList()"
     )
 
       .tree.scroll-y(
@@ -65,4 +65,4 @@
       resize resize-offset-top='10'
       )
         ol(ui-tree-nodes='' ng-model='vm.data')
-          li(ng-repeat='node in vm.data' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'" ng-click="vm.getEntity(node)")
+          li(ng-repeat='node in vm.data' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")

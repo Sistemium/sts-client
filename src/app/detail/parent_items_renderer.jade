@@ -1,6 +1,6 @@
 .tree-node.tree-node-content(ui-tree-handle='')
   a(href='')
-    div(data-nodrag='' ng-click='toggle(this)')
+    div(data-nodrag='' ng-click='vm.toggle(toggle,this,node)')
       span.glyphicon(ng-class="{\
       'glyphicon-chevron-right closed': collapsed,\
       'glyphicon-chevron-down open': !collapsed}")
