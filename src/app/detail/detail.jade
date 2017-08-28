@@ -4,7 +4,7 @@
 
     uib-tab(heading="Info")
 
-      table.table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+      table(ng-table="vm.tableParams" class="table table-bordered table-striped")
 
         thead
 
@@ -35,9 +35,7 @@
 
             span(ng-repeat='b in value')
 
-              button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="b.action()") {{ b.buttonName }}
-
-
+              button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="vm.busy = b.action()") {{ b.buttonName }}
 
     uib-tab(
     heading="Files"
@@ -60,9 +58,21 @@
     ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getEntityList()"
     )
 
-      .tree.scroll-y(
-      ui-tree data-drag-enabled="false" data-empty-placeholder-enabled="false"
-      resize resize-offset-top='10'
-      )
-        ol(ui-tree-nodes='' ng-model='vm.data')
-          li(ng-repeat='node in vm.data' ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")
+      .entityTab
+
+        .div
+          ul.entityList
+            li(ng-repeat = 'entity in vm.entityList')
+              a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
+
+        .div
+          table(ng-table="vm.entityParams" class="table table-bordered table-striped" ng-show="vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity] != 0")
+
+            thead
+
+              tr
+
+                td.header(ng-repeat='(key,value) in $data[0]') {{key}}
+
+            tr(ng-repeat='entity in $data')
+              td(ng-repeat='(key,value) in entity') {{value}}

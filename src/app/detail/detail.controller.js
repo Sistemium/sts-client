@@ -125,18 +125,17 @@ export class DetailController {
 
     this.getEntityList = () => {
 
-      this.data = [];
+      if (this.entityList){
+        return;
+      }
+
+      this.entityList = [];
 
       if (!$scope.UUID) return;
 
       this.busy = sessionData.getDeviceData($scope.UUID).then(response => {
 
-        this.data = _.map(response, entity => {
-          return {
-            label:entity.name,
-            loadChildren: getEntity
-          }
-        });
+        this.entityList = response;
 
       });
 
@@ -158,24 +157,39 @@ export class DetailController {
 
     };
 
-    function getEntity () {
+    this.entityParams = new NgTableParams({}, {
+      getData: params => {
 
-      let entityNode = this;
+        if (!this.entities){
+          this.entities = [];
+        }
+
+        if (!this.selectedEntity){
+          this.selectedEntity = "";
+        }
+
+        params.total(_.keys(this.entities[this.selectedEntity]).length);
+
+        return this.entities[this.selectedEntity];
+
+      }
+    });
+
+    this.getEntity = name => {
+
+      this.selectedEntity = name;
+
+      if (this.entities[name]){
+        return;
+      }
 
       if (!$scope.UUID) return;
 
-      return sessionData.getEntityData($scope.UUID, entityNode.label).then(response => {
+      this.busy = sessionData.getEntityData($scope.UUID, name).then(response => {
 
-        entityNode.children = _.map(response, object => {
-          return {
-            label: object.id,
-            children: mapKeyValue(object, (key, value) => {
-              return {
-                label: key + ": " + value
-              }
-            })
-          };
-        });
+        this.entities[name] = response;
+
+        this.entityParams.reload()
 
       });
 
