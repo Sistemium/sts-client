@@ -36,7 +36,11 @@ export class DetailController {
 
                   }
 
-              });
+                }).catch(error => {
+
+                  toastr.error("Unsuccessful sync - "+error, "Full Sync");
+
+                });
             }
           }]);
 

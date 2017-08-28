@@ -160,11 +160,16 @@ export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
         "STMSyncer": "fullSync"
       };
 
-      socket.emit('device:pushCommand', deviceUUID, command, response => {
+      let timeoutCallback = require('timeout-callback');
 
-        deferred.resolve(response);
+      socket.emit('device:pushCommand', deviceUUID, command, timeoutCallback(5 * 1000, (err, response) => {
 
-      });
+        if (err) {
+          deferred.reject("No answer from socket server");
+        } else {
+          deferred.resolve(response);
+        }
+      }));
 
       return deferred.promise;
 
