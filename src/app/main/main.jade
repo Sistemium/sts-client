@@ -4,7 +4,7 @@
 
     h5.center User Agent
 
-    input.form-control(ng-model="searchText")
+    input.form-control(ng-model="vm.searchText")
 
     .scroll-y(resize resize-offset-top='0')
 
@@ -13,8 +13,8 @@
         thead
 
         tr(
-        ng-repeat="session in $data | filter:searchText"
-        ng-class='{ disabled: session.destroyed }'
+        ng-repeat="session in $data | filter:vm.searchText"
+        ng-class='{ disabled: session.destroyed, active: session.id === vm.currentSesstionId }'
         ng-click="vm.showDetails(session.id)"
         )
           td(data-title="'User Agent'")

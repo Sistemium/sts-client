@@ -25,6 +25,7 @@ export class MainController {
 
     this.showDetails = (sessionId) => {
 
+      this.currentSesstionId = sessionId;
       $state.go('sessions.detail', {sessionId});
 
     };

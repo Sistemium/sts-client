@@ -5,8 +5,17 @@ $black: #333333;
   padding-left: 0;
   margin-left: 0;
 
+  tr {
+    outline: none;
+  }
+
   tr.disabled {
     color: gray;
+  }
+
+  table tr.active td {
+    background-color: cornflowerblue;
+    color: white;
   }
 
   display: flex;
