@@ -165,7 +165,8 @@ export class DetailController {
         }
 
         if (!this.selectedEntity){
-          this.selectedEntity = "";
+          this.selectedEntity = '';
+          return;
         }
 
         params.total(_.keys(this.entities[this.selectedEntity]).length);

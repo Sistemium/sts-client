@@ -60,19 +60,19 @@
 
       .entityTab
 
-        .div
-          ul.entityList
-            li(ng-repeat = 'entity in vm.entityList')
-              a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
+        //.div
+        ul.entityList
+          li(ng-repeat = 'entity in vm.entityList')
+            a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
 
-        .div
-          table(ng-table="vm.entityParams" class="table table-bordered table-striped" ng-show="vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity] != 0")
+        //.div
+        table(ng-table="vm.entityParams" class="table table-bordered table-striped" ng-show="vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity] != 0")
 
-            thead
+          thead
 
-              tr
+            tr
 
-                td.header(ng-repeat='(key,value) in $data[0]') {{key}}
+              td.header(ng-repeat='(key,value) in $data[0]') {{key}}
 
-            tr(ng-repeat='entity in $data')
-              td(ng-repeat='(key,value) in entity') {{value}}
+          tr(ng-repeat='entity in $data')
+            td(ng-repeat='(key,value) in entity') {{value}}
