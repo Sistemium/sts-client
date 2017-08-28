@@ -170,7 +170,7 @@ export class DetailController {
 
         params.total(_.keys(this.entities[this.selectedEntity]).length);
 
-        return this.entities[this.selectedEntity];
+        return this.entities[this.selectedEntity].slice((params.page() - 1) * params.count(), params.page() * params.count());
 
       }
     });
