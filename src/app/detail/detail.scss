@@ -6,10 +6,6 @@
 
 }
 
-.ng-table-pager {
-  display: none;
-}
-
 a.disabled {
   color: black;
   cursor: default;
@@ -117,4 +113,24 @@ ul {
   pointer-events: none;
   z-index: 999;
   opacity: .8
+}
+
+.entityList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-weight: bold;
+  border-right: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
+}
+
+.entityTab{
+  display: flex;
+  flex-direction: row;
+}
+
+.header{
+
+  font-weight: bold;
+
 }

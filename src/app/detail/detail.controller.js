@@ -23,17 +23,18 @@ export class DetailController {
 
               if (!$scope.UUID) return;
 
-              this.busy = sessionData.fullSync($scope.UUID).then(response => {
+              return sessionData.fullSync($scope.UUID)
+                .then(response => {
 
-                if (response) {
+                  if (response) {
 
-                  toastr.success("Successful sync", "Full Sync");
+                    toastr.success("Successful sync", "Full Sync");
 
-                } else {
+                  } else {
 
-                  toastr.error("Unsuccessful sync", "Full Sync");
+                    toastr.error("Unsuccessful sync", "Full Sync");
 
-                }
+                  }
 
               });
             }
@@ -42,6 +43,7 @@ export class DetailController {
         }
 
         return this.session;
+
       }
     });
 
@@ -81,11 +83,13 @@ export class DetailController {
 
     };
 
-    this.getFileList = (level = "/", rootNode = {children : {}}) => {
+    this.getFileList = (level = "/", rootNode = {children: {}}) => {
 
       if (!$scope.UUID) return;
 
-      let getFiles = this.minBuild(344) ? sessionData.getDeviceFilesAtLevel($scope.UUID,level) : sessionData.getDeviceFiles($scope.UUID);
+      if (level == "/" && this.files) return;
+
+      let getFiles = this.minBuild(344) ? sessionData.getDeviceFilesAtLevel($scope.UUID, level) : sessionData.getDeviceFiles($scope.UUID);
 
       this.busy = getFiles
         .then(response => {
@@ -94,8 +98,10 @@ export class DetailController {
 
             let nodeWithChildren = {
               label: _.isObject(value) ? key : key + ": " + value,
-              children: !_.isObject(value) ? value : mapKeyValue(value, fileMapCallback),
-              loadChildren: _.isEmpty(value) ? () => { return this.getFileList(level + key + "/", nodeWithChildren) } : null
+              children: !_.isObject(value) ? undefined : mapKeyValue(value, fileMapCallback),
+              loadChildren: _.isEmpty(value) ? () => {
+                return this.getFileList(level + key + "/", nodeWithChildren)
+              } : null
             };
 
             return nodeWithChildren;
@@ -103,7 +109,7 @@ export class DetailController {
 
           rootNode.children = mapKeyValue(response, fileMapCallback);
 
-          if (!this.files){
+          if (!this.files) {
             this.files = rootNode.children;
           }
 
@@ -132,15 +138,15 @@ export class DetailController {
 
     };
 
-    this.toggle = (toggle, target , node) => {
+    this.toggle = (toggle, target, node) => {
 
-      if (_.isEmpty(node.children)){
+      if (_.isEmpty(node.children)) {
 
-        this.busy = $q.when(node.loadChildren()).then(() =>{
+        this.busy = $q.when(node.loadChildren()).then(() => {
           toggle(target);
         });
 
-      }else{
+      } else {
 
         toggle(target);
 
@@ -169,7 +175,7 @@ export class DetailController {
 
       });
 
-    }
+    };
 
     function mapKeyValue(object, callback) {
 
