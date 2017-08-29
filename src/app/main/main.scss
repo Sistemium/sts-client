@@ -16,6 +16,10 @@ $black: #333333;
   table tr.active td {
     background-color: cornflowerblue;
     color: white;
+    small{
+      color: silver;
+    }
+
   }
 
   display: flex;
@@ -34,12 +38,6 @@ $black: #333333;
 
 }
 
-.container{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-}
-
 .sideView{
 
   overflow-y: scroll;
@@ -52,4 +50,8 @@ $black: #333333;
   .ng-table-pager {
     display: none;
   }
+}
+
+small{
+  color: gray;
 }

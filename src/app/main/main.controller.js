@@ -2,8 +2,18 @@ import _ from 'lodash';
 
 export class MainController {
 
-  constructor($scope, sessionData, NgTableParams, $state) {
+  constructor($scope, sessionData, NgTableParams, $state, $transitions) {
     'ngInject';
+
+    this.currentSesstionId = $state.params.sessionId;
+
+    $transitions.onSuccess({ }, trans => {
+
+      let $state = trans.router.stateService;
+
+      this.currentSesstionId = $state.params.sessionId;
+
+    });
 
     $scope.$on('initialSessions', () => {
 
@@ -23,14 +33,13 @@ export class MainController {
 
     });
 
-    this.showDetails = (sessionId) => {
+    this.showDetails = sessionId => {
 
-      this.currentSesstionId = sessionId;
       $state.go('sessions.detail', {sessionId});
 
     };
 
-    this.split = function(string) {
+    this.split = function (string) {
       return _.first(string.split(' '));
     };
 

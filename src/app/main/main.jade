@@ -1,4 +1,4 @@
-.container.main
+.sts-container.main
 
   .menu.noPagination
 
@@ -6,7 +6,7 @@
 
     input.form-control(ng-model="vm.searchText")
 
-    .scroll-y(resize resize-offset-top='0')
+    .scroll-y(resize resize-offset-top='0' resize-property='height')
 
       table(ng-table="vm.tableParams" class="table")
 
@@ -18,7 +18,9 @@
         ng-click="vm.showDetails(session.id)"
         )
           td(data-title="'User Agent'")
-           | {{ vm.split(session.userAgent) }}
+            | {{ vm.split(session.userAgent) }}
+            div
+              small {{ session.account.name }}
 
   ui-view.sideView
 
