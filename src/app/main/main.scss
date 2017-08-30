@@ -9,27 +9,23 @@ $black: #333333;
     outline: none;
   }
 
-  tr.disabled {
-    color: gray;
-  }
-
   table tr.active td {
     background-color: cornflowerblue;
     color: white;
-    small{
-      color: silver;
-    }
 
   }
 
-  display: flex;
-  flex-direction: row;
-
-  .menu{
+  .menu {
 
     flex: 0 0 15%;
     border-right: 1px solid black;
-    .center{
+
+    small {
+      display: block;
+      text-align: right;
+    }
+
+    .center {
       text-align: center;
       font-weight: bold;
     }
@@ -38,7 +34,7 @@ $black: #333333;
 
 }
 
-.sideView{
+.sideView {
 
   overflow-y: scroll;
   overflow-x: hidden;
@@ -46,12 +42,29 @@ $black: #333333;
 
 }
 
-.noPagination{
+.noPagination {
   .ng-table-pager {
     display: none;
   }
 }
 
-small{
+small {
   color: gray;
+}
+
+.row {
+
+  display: flex;
+  flex-direction: row;
+
+}
+
+.removed {
+  text-decoration: line-through;
+}
+
+.inactive {
+
+  color: gray;
+
 }

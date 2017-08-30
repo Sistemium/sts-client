@@ -1,4 +1,4 @@
-/* global angular:false*/
+/* global angular:false moment:false */
 
 import {config, localStorageConfig, cgBusyDefaults, localStorageServiceConfig} from './index.config';
 import {routerConfig} from './index.route';
@@ -43,4 +43,5 @@ angular.module('stsClient', [
   .filter('reduceObject', reduceObject)
   .directive('resize', ResizeDirective)
   .value('cgBusyDefaults', cgBusyDefaults)
+  .constant('moment', moment)
 ;

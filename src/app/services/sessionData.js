@@ -5,6 +5,7 @@
 import _ from 'lodash';
 
 export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
+export function sessionData(socket, $rootScope, $q, localStorageService, $log, moment, $timeout) {
 
   'ngInject';
 
@@ -43,8 +44,18 @@ export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
     socket.on('session:state:destroy', id => {
 
       let session = _.find(this.sessions, {id});
+
+      const lifetime = 15;
+
+      $timeout(lifetime * 1000)
+        .then(() => {
+          _.remove(this.sessions, session);
+        });
+
+      session.willBeDestroyedAt = moment().add(lifetime, 'seconds');
+
       _.set(session, 'destroyed', true);
-      $rootScope.$broadcast('destroyedSession');
+      $rootScope.$broadcast('destroyedSession', session);
 
     });
 

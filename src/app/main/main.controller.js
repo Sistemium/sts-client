@@ -2,47 +2,53 @@ import _ from 'lodash';
 
 export class MainController {
 
-  constructor($scope, sessionData, NgTableParams, $state, $transitions) {
+  constructor($scope, sessionData, $state, $transitions, $timeout, moment) {
     'ngInject';
 
     this.currentSesstionId = $state.params.sessionId;
+    this.$state = $state;
+    this.$timeout = $timeout;
+    this.moment = moment;
 
-    $transitions.onSuccess({ }, trans => {
+    $transitions.onSuccess({}, transition => {
 
-      let $state = trans.router.stateService;
-
-      this.currentSesstionId = $state.params.sessionId;
+      this.currentSesstionId = transition.params().sessionId;
 
     });
 
     $scope.$on('initialSessions', () => {
-
-      this.tableParams = new NgTableParams({}, {getData: sessionData.findAll});
-
+      this.sessions = sessionData.findAll();
     });
 
-    $scope.$on('receivedSession', () => {
+  }
 
-      this.tableParams.reload();
+  secondsToDestroy (session) {
 
-    });
+    if(!session.willBeDestroyedAt){
+      return;
+    }
 
-    $scope.$on('destroyedSession', () => {
+    this.$timeout(1000);
 
-      this.tableParams.reload();
+    return - this.moment().diff(session.willBeDestroyedAt, 'seconds');
+  }
 
-    });
+  sessionTitle (session) {
+    return _.first(session.userAgent.split(' '));
+  }
 
-    this.showDetails = sessionId => {
+  sessionClick (session) {
 
-      $state.go('sessions.detail', {sessionId});
+    this.$state.go('sessions.detail', {sessionId: session.id});
 
+  }
+
+  sessionClass (session) {
+    return session && {
+      removed: session.destroyed,
+      inactive: _.get(session, 'lastStatus.url') === 'applicationDidEnterBackground',
+      active: session.id === this.currentSesstionId
     };
-
-    this.split = function (string) {
-      return _.first(string.split(' '));
-    };
-
   }
 
 }
