@@ -5,6 +5,11 @@ export class DetailController {
   constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope) {
     'ngInject';
 
+    this.$state = $state;
+    this.$scope = $scope;
+    this.sessionData = sessionData;
+    this.$q=$q;
+
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
@@ -73,90 +78,6 @@ export class DetailController {
 
     });
 
-    this.goBack = () => {
-      $state.go('^');
-    };
-
-    this.presentObject = (param) => {
-      return _.isObject(param);
-    };
-
-    this.minBuild = build => {
-
-      return Number(_.last(_.get(this.session, "userAgent", "").split('/').slice(0, 2))) >= build;
-
-    };
-
-    this.getFileList = (level = "/", rootNode = {children: {}}) => {
-
-      if (!$scope.UUID) return;
-
-      if (level == "/" && this.files) return;
-
-      let getFiles = this.minBuild(344) ? sessionData.getDeviceFilesAtLevel($scope.UUID, level) : sessionData.getDeviceFiles($scope.UUID);
-
-      this.busy = getFiles
-        .then(response => {
-
-          let fileMapCallback = (key, value) => {
-
-            let nodeWithChildren = {
-              label: _.isObject(value) ? key : key + ": " + value,
-              children: !_.isObject(value) ? undefined : mapKeyValue(value, fileMapCallback),
-              loadChildren: _.isEmpty(value) ? () => {
-                return this.getFileList(level + key + "/", nodeWithChildren)
-              } : null
-            };
-
-            return nodeWithChildren;
-          };
-
-          rootNode.children = mapKeyValue(response, fileMapCallback);
-
-          if (!this.files) {
-            this.files = rootNode.children;
-          }
-
-        });
-
-      return this.busy;
-
-    };
-
-    this.getEntityList = () => {
-
-      if (this.entityList){
-        return;
-      }
-
-      this.entityList = [];
-
-      if (!$scope.UUID) return;
-
-      this.busy = sessionData.getDeviceData($scope.UUID).then(response => {
-
-        this.entityList = response;
-
-      });
-
-    };
-
-    this.toggle = (toggle, target, node) => {
-
-      if (_.isEmpty(node.children)) {
-
-        this.busy = $q.when(node.loadChildren()).then(() => {
-          toggle(target);
-        });
-
-      } else {
-
-        toggle(target);
-
-      }
-
-    };
-
     this.entityParams = new NgTableParams({}, {
       getData: params => {
 
@@ -176,39 +97,123 @@ export class DetailController {
       }
     });
 
-    this.getEntity = name => {
+  }
 
-      this.selectedEntity = name;
+  goBack(){
+    this.$state.go('^');
+  }
 
-      if (this.entities[name]){
-        return;
-      }
+  presentObject(param){
+    return _.isObject(param);
+  }
 
-      if (!$scope.UUID) return;
+  minBuild(build){
 
-      this.busy = sessionData.getEntityData($scope.UUID, name).then(response => {
+    return Number(_.last(_.get(this.session, "userAgent", "").split('/').slice(0, 2))) >= build;
 
-        this.entities[name] = response;
+  }
 
-        this.entityParams.reload()
+  getFileList(level = "/", rootNode = {children: {}}){
+
+    if (!this.$scope.UUID) return;
+
+    if (level == "/" && this.files) return;
+
+    let getFiles = this.minBuild(344) ? this.sessionData.getDeviceFilesAtLevel(this.$scope.UUID, level) : this.sessionData.getDeviceFiles(this.$scope.UUID);
+
+    this.busy = getFiles
+      .then(response => {
+
+        let fileMapCallback = (key, value) => {
+
+          let nodeWithChildren = {
+            label: _.isObject(value) ? key : key + ": " + value,
+            children: !_.isObject(value) ? undefined : this.mapKeyValue(value, fileMapCallback),
+            loadChildren: _.isEmpty(value) ? () => {
+              return this.getFileList(level + key + "/", nodeWithChildren)
+            } : null
+          };
+
+          return nodeWithChildren;
+        };
+
+        rootNode.children = this.mapKeyValue(response, fileMapCallback);
+
+        if (!this.files) {
+          this.files = rootNode.children;
+        }
 
       });
 
-    };
+    return this.busy;
 
-    function mapKeyValue(object, callback) {
+  }
 
-      let result = [];
+  getEntityList(){
 
-      _.forOwn(object, (value, key) => {
+    if (this.entityList){
+      return;
+    }
 
-        result.push(callback(key, value));
+    this.entityList = [];
 
+    if (!this.$scope.UUID) return;
+
+    this.busy = this.sessionData.getDeviceData(this.$scope.UUID).then(response => {
+
+      this.entityList = response;
+
+    });
+
+  }
+
+  toggle(toggle, target, node){
+
+    if (_.isEmpty(node.children)) {
+
+      this.busy = this.$q.when(node.loadChildren()).then(() => {
+        toggle(target);
       });
 
-      return result;
+    } else {
+
+      toggle(target);
 
     }
+
+  }
+
+  mapKeyValue(object, callback) {
+
+    let result = [];
+
+    _.forOwn(object, (value, key) => {
+
+      result.push(callback(key, value));
+
+    });
+
+    return result;
+
+  }
+
+  getEntity(name){
+
+    this.selectedEntity = name;
+
+    if (this.entities[name]){
+      return;
+    }
+
+    if (!this.$scope.UUID) return;
+
+    this.busy = this.sessionData.getEntityData(this.$scope.UUID, name).then(response => {
+
+      this.entities[name] = response;
+
+      this.entityParams.reload()
+
+    });
 
   }
 

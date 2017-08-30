@@ -4,7 +4,6 @@
 
 import _ from 'lodash';
 
-export function sessionData(socket, $rootScope, $q, localStorageService, $log) {
 export function sessionData(socket, $rootScope, $q, localStorageService, $log, moment, $timeout) {
 
   'ngInject';
