@@ -2,13 +2,14 @@ import _ from 'lodash';
 
 export class MainController {
 
-  constructor($scope, sessionData, $state, $transitions, $timeout, moment) {
+  constructor($scope, sessionData, $state, $transitions, moment, $timeout, $interval) {
     'ngInject';
 
     this.currentSesstionId = $state.params.sessionId;
     this.$state = $state;
-    this.$timeout = $timeout;
     this.moment = moment;
+    this.$scope = $scope;
+    this.$timeout = $timeout;
 
     $transitions.onSuccess({}, transition => {
 
@@ -20,6 +21,15 @@ export class MainController {
       this.sessions = sessionData.findAll();
     });
 
+    $scope.$on('$destroy', this.cancelTimeout);
+
+    this.interval = $interval(1000)
+      .then(() => $scope.$apply());
+
+  }
+
+  cancelTimeout () {
+    this.interval.cancel();
   }
 
   secondsToDestroy (session) {
@@ -28,9 +38,15 @@ export class MainController {
       return;
     }
 
-    this.$timeout(1000);
+    // this.$timeout(1000);
 
-    return - this.moment().diff(session.willBeDestroyedAt, 'seconds');
+    let dif = - this.moment().diff(session.willBeDestroyedAt, 'seconds');
+
+    if (dif < 0){
+      _.remove(this.sessions, session);
+    }
+
+    return dif;
   }
 
   sessionTitle (session) {
