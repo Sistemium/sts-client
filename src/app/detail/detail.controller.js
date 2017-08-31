@@ -13,68 +13,46 @@ export class DetailController {
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
-    this.tableParams = new NgTableParams({}, {
-      getData: () => {
+    this.session = sessionData.find($state.params.sessionId);
 
-        this.session = sessionData.find($state.params.sessionId);
+    $scope.UUID = _.get(this.session, "deviceUUID");
 
-        $scope.UUID = _.get(this.session, "deviceUUID");
+    if (_.get(this.session, 'deviceInfo')) {
 
-        if (_.get(this.session, 'deviceInfo')) {
+      _.set(this.session, 'commands', [{
+        buttonName: "Full Sync",
+        action: () => {
 
-          _.set(this.session, 'commands', [{
-            buttonName: "Full Sync",
-            action: () => {
+          if (!$scope.UUID) return;
 
-              if (!$scope.UUID) return;
+          return sessionData.fullSync($scope.UUID)
+            .then(response => {
 
-              return sessionData.fullSync($scope.UUID)
-                .then(response => {
+              if (response) {
 
-                  if (response) {
+                toastr.success("Successful sync", "Full Sync");
 
-                    toastr.success("Successful sync", "Full Sync");
+              } else {
 
-                  } else {
+                toastr.error("Unsuccessful sync", "Full Sync");
 
-                    toastr.error("Unsuccessful sync", "Full Sync");
+              }
 
-                  }
+            }).catch(error => {
 
-                }).catch(error => {
+              toastr.error("Unsuccessful sync - "+error, "Full Sync");
 
-                  toastr.error("Unsuccessful sync - "+error, "Full Sync");
-
-                });
-            }
-          }]);
-
+            });
         }
+      }]);
 
-        return this.session;
-
-      }
-    });
+    }
 
     rootScope.$on('initialSessions', () => {
-
-      this.tableParams.reload();
 
       if (!this.session) {
         this.goBack();
       }
-
-    });
-
-    rootScope.$on('receivedSession', () => {
-
-      this.tableParams.reload();
-
-    });
-
-    rootScope.$on('destroyedSession', () => {
-
-      this.tableParams.reload();
 
     });
 

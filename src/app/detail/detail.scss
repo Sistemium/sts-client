@@ -4,133 +4,147 @@
 
   padding: $padding;
 
-}
+  a.disabled {
+    color: black;
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+  }
 
-a.disabled {
-  color: black;
-  cursor: default;
-  pointer-events: none;
-  text-decoration: none;
-}
+  li.session {
 
-td.value {
-  .popover {
+    padding: 5px;
+    outline: none;
 
-    max-width: 500px;
+    &:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
 
-    li {
+    display: flex;
+    flex-direction: row;
 
-      list-style: none;
-      display: flex;
-      flex-direction: row;
+    label.key{
 
-      label {
-        margin-right: 10px;
-        min-width: 100px;
-        max-width: 100px;
-        text-align: right;
-        color: gray;
-        font-weight: normal;
-      }
+      flex: 0 1;
+      min-width: 150px;
+      margin-right: 10px;
 
     }
 
+    span.value {
+      flex: 1 1;
+
+      .popover {
+
+        max-width: 500px;
+
+        li {
+
+          list-style: none;
+          display: flex;
+          flex-direction: row;
+
+          label {
+            margin-right: 10px;
+            min-width: 100px;
+            max-width: 100px;
+            text-align: right;
+            color: gray;
+            font-weight: normal;
+          }
+
+        }
+
+      }
+    }
+
   }
-}
 
-td.key{
+  ul {
+    list-style-type: none;
+  }
 
-  width:10%;
+  .angular-ui-tree-empty {
+    border: 1px dashed #bbb;
+    min-height: 100px;
+    background-image: -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-image: -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-image: linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px
+  }
 
-}
+  .angular-ui-tree-node:not(.filtered-out) .ui-match {
+    background: #FF8000;
+    border-radius: 2px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
 
-/* Styles go here */
+  .angular-ui-tree-nodes {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none
+  }
 
-ul {
-  list-style-type: none;
-}
+  .angular-ui-tree-nodes .angular-ui-tree-nodes {
+    padding-left: 20px
+  }
 
-.angular-ui-tree-empty {
-  border: 1px dashed #bbb;
-  min-height: 100px;
-  background-image: -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
-  background-image: -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
-  background-image: linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
-  background-size: 60px 60px;
-  background-position: 0 0, 30px 30px
-}
-
-.angular-ui-tree-node:not(.filtered-out) .ui-match {
-  background: #FF8000;
-  border-radius: 2px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-
-
-.angular-ui-tree-nodes {
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  list-style: none
-}
-
-.angular-ui-tree-nodes .angular-ui-tree-nodes {
-  padding-left: 20px
-}
-
-.angular-ui-tree-node,
-.angular-ui-tree-placeholder {
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  min-height: 20px;
-  line-height: 20px
-}
+  .angular-ui-tree-node,
+  .angular-ui-tree-placeholder {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    line-height: 20px
+  }
 
 
 
-.angular-ui-tree-placeholder {
-  margin: 5px 0;
-  padding: 0;
-  min-height: 30px
-}
+  .angular-ui-tree-placeholder {
+    margin: 5px 0;
+    padding: 0;
+    min-height: 30px
+  }
 
-.angular-ui-tree-handle {
-  text-decoration: none;
-  font-weight: 700;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  min-height: 20px;
-  line-height: 20px
-}
+  .angular-ui-tree-handle {
+    text-decoration: none;
+    font-weight: 700;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 20px;
+    line-height: 20px
+  }
 
-.angular-ui-tree-drag {
-  position: absolute;
-  pointer-events: none;
-  z-index: 999;
-  opacity: .8
-}
+  .angular-ui-tree-drag {
+    position: absolute;
+    pointer-events: none;
+    z-index: 999;
+    opacity: .8
+  }
 
-.entityList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-weight: bold;
-  border-right: 1px solid lightgrey;
-  border-top: 1px solid lightgrey;
-}
+  .entityList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+  }
 
-.entityTab{
-  display: flex;
-  flex-direction: row;
-}
+  .entityTab{
+    display: flex;
+    flex-direction: row;
+  }
 
-.header{
+  .header{
 
-  font-weight: bold;
+    font-weight: bold;
+
+  }
 
 }

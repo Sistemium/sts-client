@@ -4,18 +4,16 @@
 
     uib-tab(heading="Info")
 
-      table(ng-table="vm.tableParams" class="table table-bordered table-striped")
+      ul
 
-        thead
-
-        tr(
-        ng-repeat='(key, value) in $data'
+        li.session(
+        ng-repeat='(key, value) in vm.session'
         ng-if="key != 'visibleColumnCount' && key != 'commands'"
         )
 
-          td.key {{ key }}
+          label.key {{ key }}
 
-          td.value
+          span.value
             a(
             href
             ng-class='{ disabled: !vm.presentObject(value) }'
@@ -24,18 +22,16 @@
             popover-placement="bottom auto"
             ) {{ value | reduceObject }}
 
-        tr(
-        ng-repeat='(key, value) in $data'
+        li.session(
+        ng-repeat='(key, value) in vm.session'
         ng-if="key == 'commands'"
         )
 
-          td {{ key }}
+          label.key {{ key }}
 
-          td
+          span.value(ng-repeat='b in value')
 
-            span(ng-repeat='b in value')
-
-              button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="vm.busy = b.action()") {{ b.buttonName }}
+            button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="vm.busy = b.action()") {{ b.buttonName }}
 
     uib-tab(
     heading="Files"
