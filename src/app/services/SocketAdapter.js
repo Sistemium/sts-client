@@ -72,27 +72,46 @@ export class SocketAdapter extends Adapter{
 
   }
 
+  beforeFindAll(mapper, query, opts){
+
+    return this.authorization;
+
+  }
+
   findAll(mapper, query, opts){
 
     return new Promise((resolve, reject) => {
 
-      this.authorization
-        .then(() => {
+      this.socket.emit('session:state:findAll', response => {
 
-          this.socket.emit('session:state:findAll', response => {
+        if(response.error){
+          reject(response.error)
+        }else{
+          resolve(response.data);
+        }
 
-            if(response.error){
-              reject(response.error)
-            }else{
-              resolve(response.data);
-            }
-
-          });
-
-        });
+      });
 
     });
 
   }
+
+  // find(mapper, id, opts){
+  //
+  //   return new Promise((resolve, reject) => {
+  //
+  //       this.socket.emit('session:state:findAll', response => {
+  //
+  //         if(response.error){
+  //           reject(response.error)
+  //         }else{
+  //           resolve(response.data);
+  //         }
+  //
+  //       });
+  //
+  //   });
+  //
+  // }
 
 }

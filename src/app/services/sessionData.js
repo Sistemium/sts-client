@@ -10,12 +10,6 @@ export function sessionData(socket, $q) {
 
   return {
 
-    findAll: () => {
-
-      return this.sessions;
-
-    },
-
     find: id => {
 
       return _.find(this.sessions, {id});
