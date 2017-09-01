@@ -4,57 +4,9 @@
 
 import _ from 'lodash';
 
-export function sessionData(socket, $rootScope, $q, localStorageService, $log, moment) {
+export function sessionData(socket, $q) {
 
   'ngInject';
-
-  const authorization = localStorageService.get('authorization');
-
-  if (!authorization) {
-    return $log.error('authorization item is not set');
-  }
-
-  socket.emit('authorization', {
-    accessToken: authorization
-  }, response => {
-
-    if (_.get(response, "isAuthorized")) {
-      $log.log("Authorized: " + response.isAuthorized)
-    }
-    if (_.get(response, "error")) {
-      $log.error(response.error);
-    }
-
-    socket.emit('session:state:findAll', response => {
-      this.sessions = response.data;
-      $rootScope.$broadcast('initialSessions');
-    });
-
-    socket.emit('session:state:register');
-
-    socket.on('session:state', sessionData => {
-
-      let {id} = sessionData;
-      _.remove(this.sessions, {id});
-      this.sessions.push(sessionData);
-      $rootScope.$broadcast('receivedSession');
-
-    });
-
-    socket.on('session:state:destroy', id => {
-
-      let session = _.find(this.sessions, {id});
-
-      const lifetime = 15;
-
-      session.willBeDestroyedAt = moment().add(lifetime, 'seconds');
-
-      _.set(session, 'destroyed', true);
-      $rootScope.$broadcast('destroyedSession', session);
-
-    });
-
-  });
 
   return {
 

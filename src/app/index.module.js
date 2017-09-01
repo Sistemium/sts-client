@@ -6,6 +6,7 @@ import {runBlock} from './index.run';
 import {MainController} from './main/main.controller';
 import {DetailController} from './detail/detail.controller';
 import {sessionData} from '../app/services/sessionData';
+import {stsData} from '../app/services/stsData';
 import io from 'socket.io-client';
 import {reduceObject} from './filters/reduceObject';
 import {ResizeDirective} from '../app/components/resize.directive';
@@ -40,6 +41,7 @@ angular.module('stsClient', [
   .controller('DetailController', DetailController)
   .factory('socket', socketFactory => socketFactory({ioSocket: io.connect()}))
   .factory('sessionData', sessionData)
+  .factory('stsData', stsData)
   .filter('reduceObject', reduceObject)
   .directive('resize', ResizeDirective)
   .value('cgBusyDefaults', cgBusyDefaults)
