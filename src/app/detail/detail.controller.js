@@ -16,8 +16,6 @@ export class DetailController {
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
-    // this.interval = $interval(() => $scope.$apply(),1000);
-
     stsData.find('session', $state.params.sessionId).then(session => {
       this.session = session;
       $scope.UUID = _.get(this.session, "deviceUUID");
@@ -147,9 +145,13 @@ export class DetailController {
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.sessionData.getDeviceData(this.$scope.UUID).then(response => {
+    this.busy = this.stsData.findAll('entity', {where:{deviceUUID:this.$scope.UUID, entityName:'Entity'}}).then(response => {
 
       this.entityList = response;
+
+      this.$timeout(() => {
+        this.$scope.$apply();
+      })
 
     });
 
@@ -195,7 +197,7 @@ export class DetailController {
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.sessionData.getEntityData(this.$scope.UUID, name).then(response => {
+    this.busy = this.stsData.findAll('entity', {where:{deviceUUID:this.$scope.UUID, entityName:name}}).then(response => {
 
       this.entities[name] = response;
 

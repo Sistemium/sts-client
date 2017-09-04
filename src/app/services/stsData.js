@@ -17,6 +17,8 @@ export function stsData(localStorageService, socket, $log) {
 
   store.defineMapper('deviceFile');
 
+  store.defineMapper('entity');
+
   return store;
 
 }

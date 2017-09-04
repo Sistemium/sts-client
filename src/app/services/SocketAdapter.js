@@ -83,6 +83,14 @@ export class SocketAdapter extends Adapter{
 
     return new Promise((resolve, reject) => {
 
+      let UUID = _.get(query,'where.deviceUUID');
+
+      let level = _.get(query,'where.level');
+
+      let entityName = _.get(query,'where.entityName');
+
+      let request = {};
+
       switch (mapper.name){
         case 'session':
           this.socket.emit('session:state:findAll', response => {
@@ -99,45 +107,68 @@ export class SocketAdapter extends Adapter{
 
         case 'deviceFile':
 
-          const UUID = _.get(query,'where.deviceUUID');
+          if (!UUID){
+            reject('deviceUUID is not defined');
+            break;
+          }
 
-          const level = _.get(query,'where.level');
+          request = {
 
-          if (UUID){
+            "STMCoreSessionFiler": {
+              "JSONOfFilesAtPath:": "/"
+            }
 
-            let request = {
+          };
+
+          let get = 'STMCoreSessionFiler.JSONOfFilesAtPath:';
+
+          if (level){
+
+            request = {
 
               "STMCoreSessionFiler": {
-                "JSONOfFilesAtPath:": "/"
+                "levelFilesAtPath:": level
               }
 
             };
 
-            let get = 'STMCoreSessionFiler.JSONOfFilesAtPath:';
+            get = 'STMCoreSessionFiler.levelFilesAtPath:';
 
-            if (level){
-
-              request = {
-
-                "STMCoreSessionFiler": {
-                  "levelFilesAtPath:": level
-                }
-
-              };
-
-              get = 'STMCoreSessionFiler.levelFilesAtPath:';
-
-            }
-
-            this.socket.emit('device:pushRequest', UUID, request, response => {
-
-              resolve(_.get(response, get));
-
-            });
-
-          }else {
-            reject('deviceUUID is not defined');
           }
+
+          this.socket.emit('device:pushRequest', UUID, request, response => {
+
+            resolve(_.get(response, get));
+
+          });
+
+          break;
+
+        case 'entity':
+
+          if (!UUID){
+            reject('deviceUUID is not defined');
+            break;
+          }
+
+          if (!entityName){
+            reject('entityName is not defined');
+            break;
+          }
+
+          request = {
+            "STMRemotePersisterController": {
+              "findAllRemote:": {
+                "entityName": entityName
+              }
+            }
+          };
+
+          this.socket.emit('device:pushRequest', UUID, request, response => {
+
+            resolve(_.get(response, "STMRemotePersisterController.findAllRemote:"));
+
+          });
 
           break;
       }
