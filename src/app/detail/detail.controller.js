@@ -2,20 +2,23 @@ import _ from 'lodash';
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope) {
+  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log) {
     'ngInject';
 
     this.$state = $state;
     this.$scope = $scope;
     this.sessionData = sessionData;
     this.$q=$q;
+    this.stsData = stsData;
+    this.$log = $log;
 
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
-    this.session = sessionData.find($state.params.sessionId);
-
-    $scope.UUID = _.get(this.session, "deviceUUID");
+    stsData.find('session', $state.params.sessionId).then(session => {
+      this.session = session;
+      $scope.UUID = _.get(this.session, "deviceUUID");
+    });
 
     if (_.get(this.session, 'deviceInfo')) {
 
@@ -97,7 +100,7 @@ export class DetailController {
 
     if (level == "/" && this.files) return;
 
-    let getFiles = this.minBuild(344) ? this.sessionData.getDeviceFilesAtLevel(this.$scope.UUID, level) : this.sessionData.getDeviceFiles(this.$scope.UUID);
+    let getFiles = this.minBuild(344) ? this.sessionData.getDeviceFilesAtLevel(this.$scope.UUID, level) : this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID}});
 
     this.busy = getFiles
       .then(response => {

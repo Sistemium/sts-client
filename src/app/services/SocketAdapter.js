@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export class SocketAdapter extends Adapter{
 
-  constructor(socket, accessToken){
+  constructor(socket, accessToken, $log){
 
     super();
 
@@ -11,11 +11,12 @@ export class SocketAdapter extends Adapter{
 
     this.accessToken = accessToken;
 
-    this.authorization = this.authorize();
+    this.$log = $log;
 
-    this.authorization.catch(err => {
+    this.authorization = this.authorize()
+      .catch(err => {
 
-      console.log(err);
+      this.$log.error(err);
 
     });
 
@@ -82,36 +83,65 @@ export class SocketAdapter extends Adapter{
 
     return new Promise((resolve, reject) => {
 
-      this.socket.emit('session:state:findAll', response => {
+      this.$log.log(mapper.name);
 
-        if(response.error){
-          reject(response.error)
-        }else{
-          resolve(response.data);
-        }
+      switch (mapper.name){
+        case 'session':
+          this.socket.emit('session:state:findAll', response => {
 
-      });
+            if(response.error){
+              reject(response.error)
+            }else{
+              this.session = response.data;
+              resolve(response.data);
+            }
+          });
+          break;
+
+        case 'deviceFile':
+          let request = {
+
+            "STMCoreSessionFiler": {
+              "JSONOfFilesAtPath:": "/"
+            }
+
+          };
+
+          const UUID = _.get(query,'where.deviceUUID');
+
+          if (UUID){
+
+            this.socket.emit('device:pushRequest', UUID, request, response => {
+
+              resolve(_.get(response, "STMCoreSessionFiler.JSONOfFilesAtPath:"));
+
+            });
+
+          }else {
+            reject('deviceUUID is not defined');
+          }
+
+          break;
+      }
 
     });
 
   }
 
-  // find(mapper, id, opts){
-  //
-  //   return new Promise((resolve, reject) => {
-  //
-  //       this.socket.emit('session:state:findAll', response => {
-  //
-  //         if(response.error){
-  //           reject(response.error)
-  //         }else{
-  //           resolve(response.data);
-  //         }
-  //
-  //       });
-  //
-  //   });
-  //
-  // }
+  find(mapper, id, opts){
+
+    return new Promise((resolve, reject) => {
+
+      switch(mapper.name){
+
+        case 'session':
+          resolve(_.find(this.session, {id}));
+          break;
+
+      }
+
+    });
+
+  }
 
 }

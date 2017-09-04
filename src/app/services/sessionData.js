@@ -10,34 +10,6 @@ export function sessionData(socket, $q) {
 
   return {
 
-    find: id => {
-
-      return _.find(this.sessions, {id});
-
-    },
-
-    getDeviceFiles: deviceUUID => {
-
-      let deferred = $q.defer();
-
-      let request = {
-
-        "STMCoreSessionFiler": {
-          "JSONOfFilesAtPath:": "/"
-        }
-
-      };
-
-      socket.emit('device:pushRequest', deviceUUID, request, response => {
-
-        deferred.resolve(_.get(response, "STMCoreSessionFiler.JSONOfFilesAtPath:"));
-
-      });
-
-      return deferred.promise;
-
-    },
-
     getDeviceFilesAtLevel: (deviceUUID, level) => {
 
       let deferred = $q.defer();
