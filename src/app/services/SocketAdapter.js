@@ -83,8 +83,6 @@ export class SocketAdapter extends Adapter{
 
     return new Promise((resolve, reject) => {
 
-      this.$log.log(mapper.name);
-
       switch (mapper.name){
         case 'session':
           this.socket.emit('session:state:findAll', response => {
@@ -95,25 +93,45 @@ export class SocketAdapter extends Adapter{
               this.session = response.data;
               resolve(response.data);
             }
+
           });
           break;
 
         case 'deviceFile':
-          let request = {
-
-            "STMCoreSessionFiler": {
-              "JSONOfFilesAtPath:": "/"
-            }
-
-          };
 
           const UUID = _.get(query,'where.deviceUUID');
 
+          const level = _.get(query,'where.level');
+
           if (UUID){
+
+            let request = {
+
+              "STMCoreSessionFiler": {
+                "JSONOfFilesAtPath:": "/"
+              }
+
+            };
+
+            let get = 'STMCoreSessionFiler.JSONOfFilesAtPath:';
+
+            if (level){
+
+              request = {
+
+                "STMCoreSessionFiler": {
+                  "levelFilesAtPath:": level
+                }
+
+              };
+
+              get = 'STMCoreSessionFiler.levelFilesAtPath:';
+
+            }
 
             this.socket.emit('device:pushRequest', UUID, request, response => {
 
-              resolve(_.get(response, "STMCoreSessionFiler.JSONOfFilesAtPath:"));
+              resolve(_.get(response, get));
 
             });
 

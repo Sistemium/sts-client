@@ -2,13 +2,14 @@ import _ from 'lodash';
 
 export class MainController {
 
-  constructor($scope, $state, $transitions, moment, stsData) {
+  constructor($scope, $state, $transitions, moment, stsData, $timeout) {
     'ngInject';
 
     this.currentSesstionId = $state.params.sessionId;
     this.$state = $state;
     this.moment = moment;
     this.$scope = $scope;
+    this.$timeout = $timeout;
 
     $transitions.onSuccess({}, transition => {
 
@@ -19,12 +20,12 @@ export class MainController {
     stsData.findAll('session')
       .then(sessions => {
         this.sessions = sessions;
-        $scope.$apply();
+        this.$timeout(() => {
+          this.$scope.$apply();
+        })
       });
 
     // $scope.$on('$destroy', this.cancelTimeout);
-
-    // this.interval = $interval(() => $scope.$apply(),1000);
 
   }
 

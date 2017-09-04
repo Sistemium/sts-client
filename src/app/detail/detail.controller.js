@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log) {
+  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log, $timeout) {
     'ngInject';
 
     this.$state = $state;
@@ -11,9 +11,12 @@ export class DetailController {
     this.$q=$q;
     this.stsData = stsData;
     this.$log = $log;
+    this.$timeout = $timeout;
 
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
+
+    // this.interval = $interval(() => $scope.$apply(),1000);
 
     stsData.find('session', $state.params.sessionId).then(session => {
       this.session = session;
@@ -100,7 +103,7 @@ export class DetailController {
 
     if (level == "/" && this.files) return;
 
-    let getFiles = this.minBuild(344) ? this.sessionData.getDeviceFilesAtLevel(this.$scope.UUID, level) : this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID}});
+    let getFiles = this.minBuild(344) ? this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID, level}}) : this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID}});
 
     this.busy = getFiles
       .then(response => {
@@ -122,6 +125,10 @@ export class DetailController {
 
         if (!this.files) {
           this.files = rootNode.children;
+
+          this.$timeout(() => {
+            this.$scope.$apply();
+          })
         }
 
       });
