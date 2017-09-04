@@ -5,7 +5,7 @@ import {routerConfig} from './index.route';
 import {runBlock} from './index.run';
 import {MainController} from './main/main.controller';
 import {DetailController} from './detail/detail.controller';
-import {sessionData} from '../app/services/sessionData';
+import {sessionCommands} from './services/sessionCommands';
 import {stsData} from '../app/services/stsData';
 import io from 'socket.io-client';
 import {reduceObject} from './filters/reduceObject';
@@ -40,7 +40,7 @@ angular.module('stsClient', [
   .controller('MainController', MainController)
   .controller('DetailController', DetailController)
   .factory('socket', socketFactory => socketFactory({ioSocket: io.connect()}))
-  .factory('sessionData', sessionData)
+  .factory('sessionCommands', sessionCommands)
   .factory('stsData', stsData)
   .filter('reduceObject', reduceObject)
   .directive('resize', ResizeDirective)

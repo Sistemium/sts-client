@@ -2,13 +2,12 @@ import _ from 'lodash';
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionData, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log, $timeout) {
+  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log, $timeout) {
     'ngInject';
 
     this.$state = $state;
     this.$scope = $scope;
-    this.sessionData = sessionData;
-    this.$q=$q;
+    this.$q = $q;
     this.stsData = stsData;
     this.$log = $log;
     this.$timeout = $timeout;
@@ -29,7 +28,7 @@ export class DetailController {
 
           if (!$scope.UUID) return;
 
-          return sessionData.fullSync($scope.UUID)
+          return sessionCommands.fullSync($scope.UUID)
             .then(response => {
 
               if (response) {
@@ -44,7 +43,7 @@ export class DetailController {
 
             }).catch(error => {
 
-              toastr.error("Unsuccessful sync - "+error, "Full Sync");
+              toastr.error("Unsuccessful sync - " + error, "Full Sync");
 
             });
         }
@@ -63,11 +62,11 @@ export class DetailController {
     this.entityParams = new NgTableParams({}, {
       getData: params => {
 
-        if (!this.entities){
+        if (!this.entities) {
           this.entities = [];
         }
 
-        if (!this.selectedEntity){
+        if (!this.selectedEntity) {
           this.selectedEntity = '';
           return;
         }
@@ -81,27 +80,32 @@ export class DetailController {
 
   }
 
-  goBack(){
+  goBack() {
     this.$state.go('^');
   }
 
-  presentObject(param){
+  presentObject(param) {
     return _.isObject(param);
   }
 
-  minBuild(build){
+  minBuild(build) {
 
     return Number(_.last(_.get(this.session, "userAgent", "").split('/').slice(0, 2))) >= build;
 
   }
 
-  getFileList(level = "/", rootNode = {children: {}}){
+  getFileList(level = "/", rootNode = {children: {}}) {
 
     if (!this.$scope.UUID) return;
 
     if (level == "/" && this.files) return;
 
-    let getFiles = this.minBuild(344) ? this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID, level}}) : this.stsData.findAll('deviceFile', {where:{deviceUUID:this.$scope.UUID}});
+    let getFiles = this.minBuild(344) ? this.stsData.findAll('deviceFile', {
+      where: {
+        deviceUUID: this.$scope.UUID,
+        level
+      }
+    }) : this.stsData.findAll('deviceFile', {where: {deviceUUID: this.$scope.UUID}});
 
     this.busy = getFiles
       .then(response => {
@@ -135,9 +139,9 @@ export class DetailController {
 
   }
 
-  getEntityList(){
+  getEntityList() {
 
-    if (this.entityList){
+    if (this.entityList) {
       return;
     }
 
@@ -145,7 +149,12 @@ export class DetailController {
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.stsData.findAll('entity', {where:{deviceUUID:this.$scope.UUID, entityName:'Entity'}}).then(response => {
+    this.busy = this.stsData.findAll('entity', {
+      where: {
+        deviceUUID: this.$scope.UUID,
+        entityName: 'Entity'
+      }
+    }).then(response => {
 
       this.entityList = response;
 
@@ -157,7 +166,7 @@ export class DetailController {
 
   }
 
-  toggle(toggle, target, node){
+  toggle(toggle, target, node) {
 
     if (_.isEmpty(node.children)) {
 
@@ -187,17 +196,22 @@ export class DetailController {
 
   }
 
-  getEntity(name){
+  getEntity(name) {
 
     this.selectedEntity = name;
 
-    if (this.entities[name]){
+    if (this.entities[name]) {
       return;
     }
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.stsData.findAll('entity', {where:{deviceUUID:this.$scope.UUID, entityName:name}}).then(response => {
+    this.busy = this.stsData.findAll('entity', {
+      where: {
+        deviceUUID: this.$scope.UUID,
+        entityName: name
+      }
+    }).then(response => {
 
       this.entities[name] = response;
 

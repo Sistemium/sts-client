@@ -2,7 +2,7 @@
  * Created by edgarjanvuicik on 25/07/2017.
  */
 
-export function sessionData(socket, $q) {
+export function sessionCommands(socket, $q) {
 
   'ngInject';
 

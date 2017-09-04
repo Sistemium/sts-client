@@ -1,9 +1,9 @@
 import {Adapter} from 'js-data-adapter'
 import _ from 'lodash';
 
-export class SocketAdapter extends Adapter{
+export class SocketAdapter extends Adapter {
 
-  constructor(socket, accessToken, $log){
+  constructor(socket, accessToken, $log) {
 
     super();
 
@@ -16,13 +16,13 @@ export class SocketAdapter extends Adapter{
     this.authorization = this.authorize()
       .catch(err => {
 
-      this.$log.error(err);
+        this.$log.error(err);
 
-    });
+      });
 
   }
 
-  authorize(){
+  authorize() {
 
     return new Promise((resolve, reject) => {
 
@@ -34,7 +34,7 @@ export class SocketAdapter extends Adapter{
         accessToken: this.accessToken
       }, response => {
 
-        if (!response.isAuthorized){
+        if (!response.isAuthorized) {
           return reject('not authorized');
         }
         if (_.get(response, "error")) {
@@ -73,31 +73,31 @@ export class SocketAdapter extends Adapter{
 
   }
 
-  beforeFindAll(mapper, query, opts){
+  beforeFindAll(mapper, query, opts) {
 
     return this.authorization;
 
   }
 
-  findAll(mapper, query, opts){
+  findAll(mapper, query, opts) {
 
     return new Promise((resolve, reject) => {
 
-      let UUID = _.get(query,'where.deviceUUID');
+      let UUID = _.get(query, 'where.deviceUUID');
 
-      let level = _.get(query,'where.level');
+      let level = _.get(query, 'where.level');
 
-      let entityName = _.get(query,'where.entityName');
+      let entityName = _.get(query, 'where.entityName');
 
       let request = {};
 
-      switch (mapper.name){
+      switch (mapper.name) {
         case 'session':
           this.socket.emit('session:state:findAll', response => {
 
-            if(response.error){
+            if (response.error) {
               reject(response.error)
-            }else{
+            } else {
               this.session = response.data;
               resolve(response.data);
             }
@@ -107,7 +107,7 @@ export class SocketAdapter extends Adapter{
 
         case 'deviceFile':
 
-          if (!UUID){
+          if (!UUID) {
             reject('deviceUUID is not defined');
             break;
           }
@@ -122,7 +122,7 @@ export class SocketAdapter extends Adapter{
 
           let get = 'STMCoreSessionFiler.JSONOfFilesAtPath:';
 
-          if (level){
+          if (level) {
 
             request = {
 
@@ -146,12 +146,12 @@ export class SocketAdapter extends Adapter{
 
         case 'entity':
 
-          if (!UUID){
+          if (!UUID) {
             reject('deviceUUID is not defined');
             break;
           }
 
-          if (!entityName){
+          if (!entityName) {
             reject('entityName is not defined');
             break;
           }
@@ -177,11 +177,11 @@ export class SocketAdapter extends Adapter{
 
   }
 
-  find(mapper, id, opts){
+  find(mapper, id, opts) {
 
     return new Promise((resolve, reject) => {
 
-      switch(mapper.name){
+      switch (mapper.name) {
 
         case 'session':
           resolve(_.find(this.session, {id}));

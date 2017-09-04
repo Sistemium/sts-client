@@ -11,7 +11,7 @@ export function stsData(localStorageService, socket, $log) {
 
   const socketAdapter = new SocketAdapter(socket, authorization, $log);
 
-  store.registerAdapter('socketAdapter',socketAdapter,{ 'default': true });
+  store.registerAdapter('socketAdapter', socketAdapter, {'default': true});
 
   store.defineMapper('session');
 

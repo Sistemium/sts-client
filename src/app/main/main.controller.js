@@ -29,36 +29,36 @@ export class MainController {
 
   }
 
-  cancelTimeout () {
+  cancelTimeout() {
     this.interval.cancel();
   }
 
-  secondsToDestroy (session) {
+  secondsToDestroy(session) {
 
-    if(!session.willBeDestroyedAt){
+    if (!session.willBeDestroyedAt) {
       return;
     }
 
-    let dif = - this.moment().diff(session.willBeDestroyedAt, 'seconds');
+    let dif = -this.moment().diff(session.willBeDestroyedAt, 'seconds');
 
-    if (dif < 0){
+    if (dif < 0) {
       _.remove(this.sessions, session);
     }
 
     return dif;
   }
 
-  sessionTitle (session) {
+  sessionTitle(session) {
     return _.first(session.userAgent.split(' '));
   }
 
-  sessionClick (session) {
+  sessionClick(session) {
 
     this.$state.go('sessions.detail', {sessionId: session.id});
 
   }
 
-  sessionClass (session) {
+  sessionClass(session) {
     return session && {
       removed: session.destroyed,
       inactive: _.get(session, 'lastStatus.url') === 'applicationDidEnterBackground' || _.get(session, 'lastStatus.url') === 'UIApplicationStateBackground',
