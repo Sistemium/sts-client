@@ -57,7 +57,7 @@
       .entityTab
 
         ul.entityList
-          li(ng-repeat = 'entity in vm.entityList')
+          li(ng-repeat = 'entity in vm.entityList | orderBy:"name"')
             a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
 
         div
