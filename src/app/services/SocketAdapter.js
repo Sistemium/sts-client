@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export class SocketAdapter extends Adapter {
 
-  constructor(socket, accessToken, $log) {
+  constructor(socket, accessToken, promise) {
 
     super();
 
@@ -11,83 +11,25 @@ export class SocketAdapter extends Adapter {
 
     this.accessToken = accessToken;
 
-    this.$log = $log;
-
-    this.authorization = this.authorize()
-      .catch(err => {
-
-        this.$log.error(err);
-
-      });
+    this.authorizationPromise = promise;
 
   }
 
-  authorize() {
+  beforeFindAll(mapper, query, opts){ // eslint-disable-line
+
+    return this.authorizationPromise;
+
+  }
+
+  findAll(mapper, query, opts) { // eslint-disable-line
 
     return new Promise((resolve, reject) => {
 
-      if (!this.accessToken) {
-        return reject('authorization item is not set');
-      }
+      let UUID = _.get(query, 'deviceUUID');
 
-      this.socket.emit('authorization', {
-        accessToken: this.accessToken
-      }, response => {
+      let level = _.get(query, 'level');
 
-        if (!response.isAuthorized) {
-          return reject('not authorized');
-        }
-        if (_.get(response, "error")) {
-          return reject(response.error);
-        }
-
-        return resolve();
-
-        // socket.emit('session:state:register');
-        //
-        // socket.on('session:state', sessionData => {
-        //
-        //   let {id} = sessionData;
-        //   _.remove(this.sessions, {id});
-        //   this.sessions.push(sessionData);
-        //   $rootScope.$broadcast('receivedSession');
-        //
-        // });
-        //
-        // socket.on('session:state:destroy', id => {
-        //
-        //   let session = _.find(this.sessions, {id});
-        //
-        //   const lifetime = 15;
-        //
-        //   session.willBeDestroyedAt = moment().add(lifetime, 'seconds');
-        //
-        //   _.set(session, 'destroyed', true);
-        //   $rootScope.$broadcast('destroyedSession', session);
-        //
-        // });
-
-      });
-
-    });
-
-  }
-
-  beforeFindAll(mapper, query, opts) {
-
-    return this.authorization;
-
-  }
-
-  findAll(mapper, query, opts) {
-
-    return new Promise((resolve, reject) => {
-
-      let UUID = _.get(query, 'where.deviceUUID');
-
-      let level = _.get(query, 'where.level');
-
-      let entityName = _.get(query, 'where.entityName');
+      let entityName = _.get(query, 'entityName');
 
       let request = {};
 
@@ -98,7 +40,6 @@ export class SocketAdapter extends Adapter {
             if (response.error) {
               reject(response.error)
             } else {
-              this.session = response.data;
               resolve(response.data);
             }
 
@@ -171,22 +112,6 @@ export class SocketAdapter extends Adapter {
           });
 
           break;
-      }
-
-    });
-
-  }
-
-  find(mapper, id, opts) {
-
-    return new Promise((resolve, reject) => {
-
-      switch (mapper.name) {
-
-        case 'session':
-          resolve(_.find(this.session, {id}));
-          break;
-
       }
 
     });

@@ -11,41 +11,18 @@ export class MainController {
     this.$scope = $scope;
     this.$timeout = $timeout;
 
+    let {session} = stsData._mappers;
+
     $transitions.onSuccess({}, transition => {
 
       this.currentSesstionId = transition.params().sessionId;
 
     });
 
-    stsData.findAll('session')
-      .then(sessions => {
-        this.sessions = sessions;
-        this.$timeout(() => {
-          this.$scope.$apply();
-        })
-      });
+    session.bindAll($scope, {}, 'vm.sessions');
 
-    // $scope.$on('$destroy', this.cancelTimeout);
+    stsData.findAll('session', {});
 
-  }
-
-  cancelTimeout() {
-    this.interval.cancel();
-  }
-
-  secondsToDestroy(session) {
-
-    if (!session.willBeDestroyedAt) {
-      return;
-    }
-
-    let dif = -this.moment().diff(session.willBeDestroyedAt, 'seconds');
-
-    if (dif < 0) {
-      _.remove(this.sessions, session);
-    }
-
-    return dif;
   }
 
   sessionTitle(session) {

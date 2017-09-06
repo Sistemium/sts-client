@@ -15,7 +15,7 @@
         ng-class='vm.sessionClass(session)'
         ng-click='vm.sessionClick(session)'
         )
-          .badge(ng-bind='vm.secondsToDestroy(session)')
+          .badge(ng-bind='session.secondsToDestroy')
           .title(ng-bind='vm.sessionTitle(session)')
           small(ng-bind='session.account.name')
 

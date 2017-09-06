@@ -15,10 +15,8 @@ export class DetailController {
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
-    stsData.find('session', $state.params.sessionId).then(session => {
-      this.session = session;
-      $scope.UUID = _.get(this.session, "deviceUUID");
-    });
+    this.session = stsData.get('session', $state.params.sessionId);
+    $scope.UUID = _.get(this.session, "deviceUUID");
 
     if (_.get(this.session, 'deviceInfo')) {
 
@@ -101,11 +99,9 @@ export class DetailController {
     if (level == "/" && this.files) return;
 
     let getFiles = this.minBuild(344) ? this.stsData.findAll('deviceFile', {
-      where: {
-        deviceUUID: this.$scope.UUID,
-        level
-      }
-    }) : this.stsData.findAll('deviceFile', {where: {deviceUUID: this.$scope.UUID}});
+      deviceUUID: this.$scope.UUID,
+      level
+    }) : this.stsData.findAll('deviceFile', {deviceUUID: this.$scope.UUID});
 
     this.busy = getFiles
       .then(response => {
@@ -150,11 +146,9 @@ export class DetailController {
     if (!this.$scope.UUID) return;
 
     this.busy = this.stsData.findAll('entity', {
-      where: {
         deviceUUID: this.$scope.UUID,
         entityName: 'Entity'
-      }
-    }).then(response => {
+      }).then(response => {
 
       this.entityList = response;
 
@@ -207,10 +201,8 @@ export class DetailController {
     if (!this.$scope.UUID) return;
 
     this.busy = this.stsData.findAll('entity', {
-      where: {
-        deviceUUID: this.$scope.UUID,
-        entityName: name
-      }
+      deviceUUID: this.$scope.UUID,
+      entityName: name
     }).then(response => {
 
       this.entities[name] = response;
