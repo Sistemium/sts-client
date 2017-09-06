@@ -22,8 +22,7 @@ export class MainController {
 
     $scope.$on('$destroy', this.cancelTimeout);
 
-    this.interval = $interval(1000)
-      .then(() => $scope.$apply());
+    this.interval = $interval(() => $scope.$apply(),1000);
 
   }
 
@@ -36,8 +35,6 @@ export class MainController {
     if(!session.willBeDestroyedAt){
       return;
     }
-
-    // this.$timeout(1000);
 
     let dif = - this.moment().diff(session.willBeDestroyedAt, 'seconds');
 
