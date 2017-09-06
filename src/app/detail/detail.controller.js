@@ -1,15 +1,15 @@
 import _ from 'lodash';
+const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $log, $timeout) {
+  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $timeout) {
     'ngInject';
 
     this.$state = $state;
     this.$scope = $scope;
     this.$q = $q;
     this.stsData = stsData;
-    this.$log = $log;
     this.$timeout = $timeout;
 
     let rootScope = $rootScope;
@@ -203,7 +203,9 @@ export class DetailController {
     this.busy = this.stsData.findAll('entity', {
       deviceUUID: this.$scope.UUID,
       entityName: name
-    }).then(response => {
+    },
+      {force:true}
+      ).then(response => {
 
       this.entities[name] = response;
 
