@@ -4,21 +4,49 @@ const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class SocketAdapter extends Adapter {
 
-  constructor(socket, accessToken, promise) {
+  constructor(socket) {
 
     super();
 
     this.socket = socket;
 
-    this.accessToken = accessToken;
-
-    this.authorizationPromise = promise;
-
   }
 
-  beforeFindAll(mapper, query, opts){ // eslint-disable-line
+  subscribe(store){
 
-    return this.authorizationPromise;
+    this.socket.emit('session:state:register');
+
+    this.socket.on('session:state', sessionData => {
+
+      let {id} = sessionData;
+      _.remove(store.getAll('session'), {id});
+      store.add('session', [sessionData]);
+
+    });
+
+    this.socket.on('session:state:destroy', id => {
+
+      let session = _.find(store.getAll('session'), {id});
+
+      let lifetime = 15;
+
+      if (session) {
+        _.set(session, 'destroyed', true);
+        let interval = setInterval(() => {  // eslint-disable-line
+          session.secondsToDestroy = lifetime;
+
+          lifetime--;
+
+          if (lifetime < 0) {
+            store.remove('session', session.id);
+            clearInterval(interval);
+          }
+
+        }, 1000);
+
+      }
+
+    });
 
   }
 

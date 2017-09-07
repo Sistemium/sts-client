@@ -1,8 +1,10 @@
 import _ from 'lodash';
+import angular from 'angular';
+const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class MainController {
 
-  constructor($scope, $state, $transitions, moment, stsData, $timeout) {
+  constructor($scope, $state, $transitions, moment, stsData, $timeout, toastr) {
     'ngInject';
 
     this.currentSesstionId = $state.params.sessionId;
@@ -11,7 +13,7 @@ export class MainController {
     this.$scope = $scope;
     this.$timeout = $timeout;
 
-    let {session} = stsData._mappers;
+    let {session} = stsData.models;
 
     $transitions.onSuccess({}, transition => {
 
@@ -21,7 +23,8 @@ export class MainController {
 
     session.bindAll($scope, {}, 'vm.sessions');
 
-    stsData.findAll('session', {});
+    session.findAll({})
+      .catch(err => toastr.error(angular.toJson(err)));
 
   }
 
