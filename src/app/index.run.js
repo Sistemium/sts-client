@@ -1,9 +1,17 @@
 import modelsConfig from './models.config';
 
-export function runBlock ($log, stsData) {
-  'ngInject';
 
+export function runBlock ($log, StsData, $trace, $transitions, auth) {
+
+  'ngInject';
+  modelsConfig(StsData);
   $log.debug('sts client start');
-  modelsConfig(stsData);
+  $trace.enable('TRANSITION');
+  $transitions.onStart({ }, () => {
+
+    return auth;
+
+  });
+
 
 }

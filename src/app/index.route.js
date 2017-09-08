@@ -2,12 +2,6 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
   'ngInject';
 
   $stateProvider
-    .state('authorization', {
-      url: '/authorization',
-      templateUrl: 'app/auth/auth.html',
-      controller: 'AuthController',
-      controllerAs: 'vm'
-    })
     .state('sessions', {
       url: '/sessions',
       templateUrl: 'app/main/main.html',
@@ -21,5 +15,5 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       controllerAs: 'vm'
     });
 
-  $urlRouterProvider.otherwise('/authorization');
+  $urlRouterProvider.otherwise('/sessions');
 }

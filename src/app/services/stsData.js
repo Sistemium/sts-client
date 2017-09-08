@@ -1,70 +1,75 @@
 import {DataStore} from 'js-data';
-import {SocketAdapter} from './SocketAdapter';
 import _ from 'lodash';
+
+const moment = require('moment');
 
 const debug = require('debug')('sts:socket');  // eslint-disable-line
 
-export function stsData(socket, $timeout) {
+export class StsData extends DataStore {
 
-  'ngInject';
+  constructor() {
 
-  const store = new DataStore();
+    super();
 
-  function storeBindAll(scope, filter, bind, mapper) {
+    _.assign(this, {
+      models: {}
+    });
 
-    store.on('add', onChange);
+    this.on('add', this.onChange, this);
 
-    store.on('afterFindAll', onChange);
+    this.on('afterFindAll', this.onChange, this);
 
-    store.on('change', onChange);
+    this.on('change', this.onChange, this);
 
-    store.on('remove', onChange);
+    this.on('remove', this.onChange, this);
 
-    function onChange(mapperName) {
-
-      if (mapperName === mapper.name) {
-
-        _.set(scope, bind, store.filter(mapper.name, filter));
-
-        $timeout(() => {
-          scope.$apply();
-        })
-
-      }
-
-    }
+    return this;
 
   }
 
-  const socketAdapter = new SocketAdapter(socket);
+  setScope(scope) {
+    this.scope = scope;
+  }
 
-  store.registerAdapter('socketAdapter', socketAdapter, {'default': true});
+  onChange(mapperName) {
 
-  store.models = {};
+    let mapper = this.getMapperByName(mapperName);
 
-  store.defineModel = defineModel;
+    if (!mapper) return;
 
-  socketAdapter.subscribe(store);
+    this.scope.$evalAsync(() => {
+      mapper.lastModified = moment().format('x');
+    });
 
-  function defineModel(name, config) {
+  }
+
+  storeBindAll(scope, filter, bind, mapper) {
+
+    scope.$watch(() => {
+      return mapper.lastModified;
+    }, () => {
+      _.set(scope, bind, this.filter(mapper.name, filter));
+    });
+
+  }
+
+  defineModel(name, config) {
 
     const mapperConfig = _.assign({
       schema: {track: true}
     }, config || {});
 
-    const modelMapper = store.defineMapper(name, mapperConfig);
+    const modelMapper = this.defineMapper(name, mapperConfig);
 
     const model = {
-      findAll: (params, options) => store.findAll('session', params, options),
-      bindAll: (scope, filter, bind) => storeBindAll(scope, filter, bind, modelMapper)
+      findAll: (params, options) => this.findAll(name, params, options),
+      bindAll: (scope, filter, bind) => this.storeBindAll(scope, filter, bind, modelMapper)
     };
 
-    store.models[name] = model;
+    this.models[name] = model;
 
     return model;
 
   }
-
-  return store;
 
 }
