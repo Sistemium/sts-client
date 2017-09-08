@@ -6,11 +6,11 @@ import {runBlock} from './index.run';
 import {MainController} from './main/main.controller';
 import {StsData} from './services/StsData';
 import {DetailController} from './detail/detail.controller';
-import {sessionCommands} from './services/sessionCommands';
+import {SessionCommands} from './services/SessionCommands';
 import io from 'socket.io-client';
 import {reduceObject} from './filters/reduceObject';
 import {ResizeDirective} from '../app/components/resize.directive';
-import {auth} from '../app/services/auth';
+import {Auth} from './services/Auth';
 
 require('ng-table');
 require('angular-local-storage');
@@ -40,10 +40,10 @@ angular.module('stsClient', [
   .run(runBlock)
   .controller('MainController', MainController)
   .controller('DetailController', DetailController)
-  .factory('socket', socketFactory => socketFactory({ioSocket: io.connect()}))
-  .factory('sessionCommands', sessionCommands)
-  .service('StsData', () => new StsData())
-  .factory('auth', auth)
+  .factory('Socket', socketFactory => socketFactory({ioSocket: io.connect()}))
+  .factory('SessionCommands', SessionCommands)
+  .factory('StsData', () => new StsData())
+  .factory('Auth', Auth)
   .filter('reduceObject', reduceObject)
   .directive('resize', ResizeDirective)
   .value('cgBusyDefaults', cgBusyDefaults)

@@ -2,7 +2,7 @@
  * Created by edgarjanvuicik on 25/07/2017.
  */
 
-export function sessionCommands(socket, $q) {
+export function SessionCommands(Socket, $q) {
 
   'ngInject';
 
@@ -18,7 +18,7 @@ export function sessionCommands(socket, $q) {
 
       let timeoutCallback = require('timeout-callback');
 
-      socket.emit('device:pushCommand', deviceUUID, command, timeoutCallback(5 * 1000, (err, response) => {
+      Socket.emit('device:pushCommand', deviceUUID, command, timeoutCallback(5 * 1000, (err, response) => {
 
         if (err) {
           deferred.reject("No answer from socket server");

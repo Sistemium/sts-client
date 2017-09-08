@@ -2,20 +2,20 @@ const debug = require('debug')('sts:socket'); // eslint-disable-line
 import _ from 'lodash';
 import {SocketAdapter} from './SocketAdapter'
 
-export function auth(localStorageService, toastr, socket, StsData, $rootScope) {
+export function Auth(localStorageService, toastr, Socket, StsData, $rootScope) {
 
   'ngInject';
 
   const authorization = localStorageService.get('authorization');
 
   if (!authorization) {
-    toastr.error('No auth key');
+    toastr.error('No Auth key');
     return;
   }
 
   let promise = new Promise((resolve, reject) => {
 
-    socket.emit('authorization', {
+    Socket.emit('authorization', {
       accessToken: authorization
     }, response => {
 
@@ -35,7 +35,7 @@ export function auth(localStorageService, toastr, socket, StsData, $rootScope) {
 
   return promise.then(() => {
 
-    const socketAdapter = new SocketAdapter(socket);
+    const socketAdapter = new SocketAdapter(Socket);
 
     StsData.setScope($rootScope);
 

@@ -4,7 +4,7 @@ const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, $timeout, StsData) {
+  constructor($state, $rootScope, SessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, $timeout, StsData) {
     'ngInject';
 
     this.$state = $state;
@@ -27,7 +27,7 @@ export class DetailController {
 
           if (!$scope.UUID) return;
 
-          return sessionCommands.fullSync($scope.UUID)
+          return SessionCommands.fullSync($scope.UUID)
             .then(response => {
 
               if (response) {
