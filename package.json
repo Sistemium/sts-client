@@ -10,6 +10,7 @@
     "js-data": "^3.0.1",
     "js-data-adapter": "^0.8.5",
     "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "ng-table": "^3.0.1",
     "socket.io-client": "^1.7.1",
     "timeout-callback": "^2.0.0",

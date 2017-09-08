@@ -3,19 +3,19 @@ const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class DetailController {
 
-  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, stsData, $timeout) {
+  constructor($state, $rootScope, sessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, $timeout, StsData) {
     'ngInject';
 
     this.$state = $state;
     this.$scope = $scope;
     this.$q = $q;
-    this.stsData = stsData;
+    this.dataStore = StsData;
     this.$timeout = $timeout;
 
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
 
-    this.session = stsData.get('session', $state.params.sessionId);
+    this.session = this.dataStore.get('session', $state.params.sessionId);
     $scope.UUID = _.get(this.session, "deviceUUID");
 
     if (_.get(this.session, 'deviceInfo')) {
@@ -98,10 +98,10 @@ export class DetailController {
 
     if (level == "/" && this.files) return;
 
-    let getFiles = this.minBuild(344) ? this.stsData.findAll('deviceFile', {
+    let getFiles = this.minBuild(344) ? this.dataStore.findAll('deviceFile', {
       deviceUUID: this.$scope.UUID,
       level
-    }) : this.stsData.findAll('deviceFile', {deviceUUID: this.$scope.UUID});
+    }) : this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID});
 
     this.busy = getFiles
       .then(response => {
@@ -145,7 +145,7 @@ export class DetailController {
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.stsData.findAll('entity', {
+    this.busy = this.dataStore.findAll('entity', {
         deviceUUID: this.$scope.UUID,
         entityName: 'Entity'
       }).then(response => {
@@ -200,7 +200,7 @@ export class DetailController {
 
     if (!this.$scope.UUID) return;
 
-    this.busy = this.stsData.findAll('entity', {
+    this.busy = this.dataStore.findAll('entity', {
       deviceUUID: this.$scope.UUID,
       entityName: name
     },
