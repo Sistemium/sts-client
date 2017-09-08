@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class DetailController {
@@ -146,9 +147,9 @@ export class DetailController {
     if (!this.$scope.UUID) return;
 
     this.busy = this.dataStore.findAll('entity', {
-        deviceUUID: this.$scope.UUID,
-        entityName: 'Entity'
-      }).then(response => {
+      deviceUUID: this.$scope.UUID,
+      entityName: 'Entity'
+    }).then(response => {
 
       this.entityList = response;
 
@@ -201,11 +202,11 @@ export class DetailController {
     if (!this.$scope.UUID) return;
 
     this.busy = this.dataStore.findAll('entity', {
-      deviceUUID: this.$scope.UUID,
-      entityName: name
-    },
-      {force:true}
-      ).then(response => {
+        deviceUUID: this.$scope.UUID,
+        entityName: name
+      },
+      {force: true}
+    ).then(response => {
 
       this.entities[name] = response;
 

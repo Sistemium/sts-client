@@ -1,5 +1,6 @@
 import {Adapter} from 'js-data-adapter'
 import _ from 'lodash';
+
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class SocketAdapter extends Adapter {
@@ -12,7 +13,7 @@ export class SocketAdapter extends Adapter {
 
   }
 
-  subscribe(store){
+  subscribe(store) {
 
     this.socket.emit('session:state:register');
 

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import angular from 'angular';
+
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 
 export class MainController {
