@@ -54,20 +54,22 @@
     ng-click="vm.minBuild(341) && !vm.session.destroyed && vm.getEntityList()"
     )
 
-      .entityTab
+      .scroll-y(resize resize-offset-top='0' resize-property='height')
 
-        ul.entityList
-          li(ng-repeat = 'entity in vm.entityList | orderBy:"name"')
-            a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
+        .entityTab
 
-        div
-          table(ng-table="vm.entityParams" class="table table-bordered table-striped" ng-show="vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity] != 0")
+          ul.entityList
+            li(ng-repeat = 'entity in vm.entityList | orderBy:"name"')
+              a(href ="" ng-click='vm.getEntity(entity.name)') {{entity.name}}
 
-            thead
+          div
+            table(ng-table="vm.entityParams" class="table table-bordered table-striped" ng-show="vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity] != 0")
 
-              tr
+              thead
 
-                td.header(ng-repeat='(key,value) in $data[0]') {{key}}
+                tr
 
-            tr(ng-repeat='entity in $data')
-              td(ng-repeat='(key,value) in entity') {{value}}
+                  td.header(ng-repeat='(key,value) in $data[0]') {{key}}
+
+              tr(ng-repeat='entity in $data')
+                td(ng-repeat='(key,value) in entity') {{value}}
