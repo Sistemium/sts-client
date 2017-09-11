@@ -13,6 +13,9 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       templateUrl: 'app/detail/detail.html',
       controller: 'DetailController',
       controllerAs: 'vm'
+    })
+    .state('login', {
+        url: '/login'
     });
 
   $urlRouterProvider.otherwise('/sessions');
