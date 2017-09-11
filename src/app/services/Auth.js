@@ -1,6 +1,7 @@
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 import _ from 'lodash';
 import {SocketAdapter} from './SocketAdapter'
+import angular from 'angular';
 
 
 
@@ -57,6 +58,13 @@ export function Auth(localStorageService, toastr, Socket, StsData, $rootScope) {
 
         socketAdapter.subscribe(StsData);
 
+        let {session} = StsData.models;
+
+        return session.findAll({})
+          .catch(err => {
+            toastr.error(angular.toJson(err));
+            debug(err);
+          });
 
       }).catch(err => {
         toastr.error(err);

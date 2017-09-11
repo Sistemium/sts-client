@@ -17,6 +17,7 @@ export class DetailController {
     treeConfig.defaultCollapsed = true;
 
     this.session = this.dataStore.get('session', $state.params.sessionId);
+
     $scope.UUID = _.get(this.session, "deviceUUID");
 
     if (_.get(this.session, 'deviceInfo')) {

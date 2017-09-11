@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import angular from 'angular';
 
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 
@@ -24,12 +23,6 @@ export class MainController {
     });
 
     session.bindAll($scope, {}, 'vm.sessions');
-
-    session.findAll({})
-      .catch(err => {
-        toastr.error(angular.toJson(err));
-        debug(err);
-      });
 
   }
 
