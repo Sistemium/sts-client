@@ -71,9 +71,32 @@ export class DetailController {
           return;
         }
 
-        params.total(_.keys(this.entities[this.selectedEntity]).length);
+        if (!this.$scope.UUID) return;
 
-        return this.entities[this.selectedEntity].slice((params.page() - 1) * params.count(), params.page() * params.count());
+        let promise = this.dataStore.count('entity',{
+          entityName:this.selectedEntity,
+          deviceUUID: this.$scope.UUID
+        }).then(total => {
+
+          params.total(total);
+
+          return this.dataStore.findAll('entity', {
+              deviceUUID: this.$scope.UUID,
+              entityName: this.selectedEntity,
+              pageSize: params.count(),
+              startPage: params.page()
+            },
+            {force: true}
+          );
+
+        }).then(response => {
+          this.entities[this.selectedEntity] = response;
+          return response;
+        });
+
+        this.busy = promise;
+
+        return promise;
 
       }
     });
@@ -196,24 +219,7 @@ export class DetailController {
 
     this.selectedEntity = name;
 
-    if (this.entities[name]) {
-      return;
-    }
-
-    if (!this.$scope.UUID) return;
-
-    this.busy = this.dataStore.findAll('entity', {
-        deviceUUID: this.$scope.UUID,
-        entityName: name
-      },
-      {force: true}
-    ).then(response => {
-
-      this.entities[name] = response;
-
-      this.entityParams.reload()
-
-    });
+    this.entityParams.reload();
 
   }
 

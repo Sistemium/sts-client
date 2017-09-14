@@ -61,6 +61,10 @@ export class SocketAdapter extends Adapter {
 
       let entityName = _.get(query, 'entityName');
 
+      let pageSize = _.get(query, 'pageSize');
+
+      let startPage = _.get(query, 'startPage');
+
       let request = {};
 
       switch (mapper.name) {
@@ -130,7 +134,11 @@ export class SocketAdapter extends Adapter {
           request = {
             "STMRemotePersisterController": {
               "findAllRemote:": {
-                "entityName": entityName
+                "entityName": entityName,
+                "options": {
+                  "pageSize": pageSize,
+                  "startPage": startPage
+                }
               }
             }
           };
@@ -142,6 +150,43 @@ export class SocketAdapter extends Adapter {
           });
 
           break;
+      }
+
+    });
+
+  }
+
+  count(mapper, query, opts){ // eslint-disable-line
+
+    return new Promise((resolve
+) => {
+
+      let request = {};
+
+      let entityName = _.get(query, 'entityName');
+
+      let UUID = _.get(query, 'deviceUUID');
+
+      switch (mapper.name) {
+
+        case "entity":
+
+          request = {
+            "STMRemotePersisterController": {
+              "countRemote:": {
+                "entityName": entityName
+              }
+            }
+          };
+
+          this.socket.emit('device:pushRequest', UUID, request, response => {
+
+            resolve(_.get(response, "STMRemotePersisterController.countRemote:"));
+
+          });
+
+          break;
+
       }
 
     });
