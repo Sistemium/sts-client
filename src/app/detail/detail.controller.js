@@ -103,7 +103,7 @@ export class DetailController {
     let getFiles = this.minBuild(344) ? this.dataStore.findAll('deviceFile', {
       deviceUUID: this.$scope.UUID,
       level
-    }) : this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID});
+    }, {force:true}) : this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID}, {force:true});
 
     this.busy = getFiles
       .then(response => {
@@ -150,7 +150,7 @@ export class DetailController {
     this.busy = this.dataStore.findAll('entity', {
       deviceUUID: this.$scope.UUID,
       entityName: 'Entity'
-    }).then(response => {
+    }, {force:true}).then(response => {
 
       this.entityList = response;
 
