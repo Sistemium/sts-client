@@ -11,7 +11,7 @@
       ul.list-group
 
         li.list-group-item.session(
-        ng-repeat='session in vm.sessions | filter:vm.searchText'
+        ng-repeat='session in vm.sessions | filter:vm.searchText | orderBy:"cts"'
         ng-class='vm.sessionClass(session)'
         ng-click='vm.sessionClick(session)'
         )
