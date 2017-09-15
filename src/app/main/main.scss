@@ -10,7 +10,7 @@ $black: #333333;
 
   .menu {
 
-    flex: 0 0 15%;
+    width: 200px;
     border-right: 1px solid black;
 
     small {
@@ -23,13 +23,17 @@ $black: #333333;
       font-weight: bold;
     }
 
+    li {
+      padding: 7px;
+    }
+
   }
 
   .sideView {
 
     overflow-y: scroll;
     overflow-x: hidden;
-    flex: 0 0 auto;
+    flex: 1;
 
   }
 

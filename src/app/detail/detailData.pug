@@ -1,0 +1,24 @@
+.detail-data
+
+  ul.entity-list(
+  resize resize-offset-top='0' resize-property='height'
+  )
+    li(ng-repeat = 'entity in vm.entityList | orderBy:"name"')
+      a(href ng-click='vm.getEntity(entity.name)') {{entity.name}}
+
+  .entity-data(
+  resize resize-offset-top='0' resize-property='height'
+  )
+
+    table.table.table-bordered.table-striped(
+    ng-table='vm.entityParams'
+    ng-show='vm.entities[vm.selectedEntity] && vm.entities[vm.selectedEntity]'
+    )
+
+      thead
+
+        tr
+          td.header(ng-repeat='(key,value) in $data[0]') {{ key }}
+
+      tr(ng-repeat='entity in $data')
+        td(ng-repeat='(key,value) in entity') {{value}}

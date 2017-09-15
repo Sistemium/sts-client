@@ -13,7 +13,7 @@ gulp.task('markups', function() {
     path.extname = '.html';
   }
 
-  return gulp.src(path.join(conf.paths.src, '/app/**/*.jade'))
+  return gulp.src(path.join(conf.paths.src, '/app/**/*.{jade,pug}'))
     .pipe($.consolidate('jade', { basedir: conf.paths.src, doctype: 'html', pretty: '  ' })).on('error', conf.errorHandler('Jade'))
     .pipe($.rename(renameToHtml))
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve/app/')))

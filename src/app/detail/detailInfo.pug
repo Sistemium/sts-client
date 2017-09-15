@@ -1,0 +1,29 @@
+ul
+
+  li.session(
+  ng-repeat='(key, value) in vm.session'
+  ng-if="key != 'visibleColumnCount' && key != 'commands'"
+  )
+
+    label.key {{ key }}
+
+    span.value
+      a(
+      href
+      ng-class='{ disabled: !vm.presentObject(value) }'
+      uib-popover-template='"app/detail/showObject.html"'
+      popover-trigger="'outsideClick'"
+      popover-placement="bottom auto"
+      ) {{ value | reduceObject }}
+
+  li.session(
+  ng-repeat='(key, value) in vm.session'
+  ng-if="key == 'commands'"
+  )
+
+    label.key {{ key }}
+
+    span.value(ng-repeat='b in value')
+
+      button(type="button" class="btn btn-primary" ng-disabled="vm.session.destroyed" ng-click="vm.busy = b.action()")
+        | {{ b.buttonName }}

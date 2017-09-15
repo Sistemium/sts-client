@@ -1,0 +1,8 @@
+input.form-control(ng-model="searchText")
+
+.tree.scroll-y(
+ui-tree data-drag-enabled="false" data-empty-placeholder-enabled="false"
+resize resize-offset-top='10'
+)
+  ol(ui-tree-nodes='' ng-model='vm.files')
+    li(ng-repeat='node in vm.files | filter:searchText', ui-tree-node='' ng-include="'app/detail/parent_items_renderer.html'")
