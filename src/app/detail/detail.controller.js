@@ -73,26 +73,50 @@ export class DetailController {
 
         if (!this.$scope.UUID) return;
 
-        let promise = this.dataStore.count('entity',{
-          entityName:this.selectedEntity,
-          deviceUUID: this.$scope.UUID
-        }).then(total => {
+        let promise;
 
-          params.total(total);
+        if (this.minBuild(344)){
 
-          return this.dataStore.findAll('entity', {
+          promise = this.dataStore.count('entity',{
+            entityName:this.selectedEntity,
+            deviceUUID: this.$scope.UUID
+          }).then(total => {
+
+            params.total(total);
+
+            return this.dataStore.findAll('entity', {
+                deviceUUID: this.$scope.UUID,
+                entityName: this.selectedEntity,
+                pageSize: params.count(),
+                startPage: params.page()
+              },
+              {force: true}
+            );
+
+          }).then(response => {
+            this.entities[this.selectedEntity] = response;
+            return response;
+          });
+
+        } else {
+
+          if (this.entities[this.selectedEntity]){
+            params.total(this.entities[this.selectedEntity].length);
+            return this.entities[this.selectedEntity].slice((params.page() - 1) * params.count(), params.page() * params.count());
+          }
+
+          promise = this.dataStore.findAll('entity', {
               deviceUUID: this.$scope.UUID,
-              entityName: this.selectedEntity,
-              pageSize: params.count(),
-              startPage: params.page()
+              entityName: this.selectedEntity
             },
             {force: true}
-          );
+          ).then(response => {
+            this.entities[this.selectedEntity] = response;
+            params.total(response.length);
+            return this.entities[this.selectedEntity].slice((params.page() - 1) * params.count(), params.page() * params.count());
+          });
 
-        }).then(response => {
-          this.entities[this.selectedEntity] = response;
-          return response;
-        });
+        }
 
         this.busy = promise;
 
