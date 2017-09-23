@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import angular from 'angular';
 
 const debug = require('debug')('sts:socket'); // eslint-disable-line
 
@@ -12,6 +13,7 @@ export class DetailController {
     this.$q = $q;
     this.dataStore = StsData;
     this.$timeout = $timeout;
+    this.toastr = toastr;
 
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
@@ -141,7 +143,7 @@ export class DetailController {
 
   }
 
-  getFileList(level = "/", rootNode = {children: {}}) {
+  getFileList(level = "/", rootNode = {children: []}) {
 
     if (!this.$scope.UUID) return;
 
@@ -162,7 +164,9 @@ export class DetailController {
             children: !_.isObject(value) ? undefined : this.mapKeyValue(value, fileMapCallback),
             loadChildren: _.isEmpty(value) ? () => {
               return this.getFileList(level + key + "/", nodeWithChildren)
-            } : null
+            } : null,
+            level:level + key + "/",
+            parent: rootNode
           };
 
           return nodeWithChildren;
@@ -244,6 +248,30 @@ export class DetailController {
     this.selectedEntity = name;
 
     this.entityParams.reload();
+
+  }
+
+  removeTreeItem(node){
+
+    if (node.deleting){
+      this.dataStore.destroyAll('deviceFile', {deviceUUID: this.$scope.UUID, level:node.level}, {force:true})
+        .then(result => {
+
+          if (result.length === 0) {
+            this.toastr.success('Successfully removed');
+            _.remove(node.parent.children, item => item === node);
+          }else {
+            this.toastr.error(result);
+          }
+
+        }).catch(err => {
+        this.toastr.error(angular.toJson(err));
+      });
+    }
+
+    node.deleting = this.$timeout(2000).then(() =>{
+      delete node.deleting;
+    });
 
   }
 

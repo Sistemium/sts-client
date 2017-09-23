@@ -1,10 +1,14 @@
 .tree-node.tree-node-content(ui-tree-handle='')
-  a(href='')
-    div(data-nodrag='' ng-click='vm.toggle(toggle,this,node)')
+  div(data-nodrag='' ng-mouseenter='treeItmemFocused = true' ng-mouseleave='treeItmemFocused = false')
+    a(href='' ng-click='vm.toggle(toggle,this,node)')
       span.glyphicon(ng-class="{\
       'glyphicon-chevron-right closed': collapsed,\
       'glyphicon-chevron-down open': !collapsed}")
-      span(ng-bind-html='node.label')  {{node.label}}
+      span(ng-bind-html='node.label') {{node.label}}
+    a(href='' ng-click='vm.removeTreeItem(node)')
+     span.glyphicon(ng-class="{\
+     'glyphicon glyphicon-trash': vm.minBuild(347) && treeItmemFocused,\
+      red: node.deleting}")
 ul(ui-tree-nodes='' ng-model='node.children' ng-if="!collapsed")
   li(ng-repeat='node in node.children' ui-tree-node='' ng-include="node.children ? 'app/detail/parent_items_renderer.html' :  'app/detail/terminal_item_renderer.html' ")
 

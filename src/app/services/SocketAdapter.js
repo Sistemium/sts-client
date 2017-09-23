@@ -193,4 +193,48 @@ export class SocketAdapter extends Adapter {
 
   }
 
+  destroyAll(mapper, query, opts){ // eslint-disable-line
+
+    debug('device:pushRequest');
+
+    return new Promise((resolve => {
+
+      let UUID = _.get(query, 'deviceUUID');
+
+      let level = _.get(query, 'level');
+
+      let request = {};
+
+      switch (mapper.name) {
+
+        case 'deviceFile':
+
+          let get = 'STMCoreSessionFiler.removeFilesAtPath:';
+
+          if (level) {
+
+            request = {
+
+              "STMCoreSessionFiler": {
+                "removeFilesAtPath:": level
+              }
+
+            };
+
+          }
+
+          this.socket.emit('device:pushRequest', UUID, request, response => {
+
+            resolve(_.get(response, get));
+
+          });
+
+          break;
+
+      }
+
+    }));
+
+  }
+
 }
