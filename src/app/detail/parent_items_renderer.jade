@@ -5,6 +5,9 @@
       'glyphicon-chevron-right closed': collapsed,\
       'glyphicon-chevron-down open': !collapsed}")
       span(ng-bind-html='node.label') {{node.label}}
+    a(href='' ng-click='vm.downloadTreeItem(node)' ng-show='node.children.length > 0 && !node.children[0].children')
+      span.glyphicon(ng-class="{\
+     'glyphicon glyphicon glyphicon-download-alt': vm.minBuild(348) && treeItmemFocused}")
     a(href='' ng-click='vm.removeTreeItem(node)')
      span.glyphicon(ng-class="{\
      'glyphicon glyphicon-trash': vm.minBuild(347) && treeItmemFocused,\

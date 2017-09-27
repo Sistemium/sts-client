@@ -2,6 +2,7 @@ import _ from 'lodash';
 import angular from 'angular';
 
 const debug = require('debug')('sts:socket'); // eslint-disable-line
+const FileSaver = require('file-saver');
 
 export class DetailController {
 
@@ -77,10 +78,10 @@ export class DetailController {
 
         let promise;
 
-        if (this.minBuild(344)){
+        if (this.minBuild(344)) {
 
-          promise = this.dataStore.count('entity',{
-            entityName:this.selectedEntity,
+          promise = this.dataStore.count('entity', {
+            entityName: this.selectedEntity,
             deviceUUID: this.$scope.UUID
           }).then(total => {
 
@@ -102,7 +103,7 @@ export class DetailController {
 
         } else {
 
-          if (this.entities[this.selectedEntity]){
+          if (this.entities[this.selectedEntity]) {
             params.total(this.entities[this.selectedEntity].length);
             return this.entities[this.selectedEntity].slice((params.page() - 1) * params.count(), params.page() * params.count());
           }
@@ -152,7 +153,7 @@ export class DetailController {
     let getFiles = this.minBuild(344) ? this.dataStore.findAll('deviceFile', {
       deviceUUID: this.$scope.UUID,
       level
-    }, {force:true}) : this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID}, {force:true});
+    }, {force: true}) : this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID}, {force: true});
 
     this.busy = getFiles
       .then(response => {
@@ -165,7 +166,7 @@ export class DetailController {
             loadChildren: _.isEmpty(value) ? () => {
               return this.getFileList(level + key + "/", nodeWithChildren)
             } : null,
-            level:level + key + "/",
+            level: level + key + "/",
             parent: rootNode
           };
 
@@ -201,7 +202,7 @@ export class DetailController {
     this.busy = this.dataStore.findAll('entity', {
       deviceUUID: this.$scope.UUID,
       entityName: 'Entity'
-    }, {force:true}).then(response => {
+    }, {force: true}).then(response => {
 
       this.entityList = response;
 
@@ -251,28 +252,60 @@ export class DetailController {
 
   }
 
-  removeTreeItem(node){
+  removeTreeItem(node) {
 
-    if (node.deleting){
-      this.dataStore.destroyAll('deviceFile', {deviceUUID: this.$scope.UUID, level:node.level}, {force:true})
-        .then(result => {
+    if (node.deleting) {
+      this.dataStore.destroyAll('deviceFile', {deviceUUID: this.$scope.UUID, level: node.level}, {force: true})
+        .then(() => {
 
-          if (result.length === 0) {
-            this.toastr.success('Successfully removed');
-            _.remove(node.parent.children, item => item === node);
-          }else {
-            this.toastr.error(result);
-          }
+          this.toastr.success('Successfully removed');
+          _.remove(node.parent.children, item => item === node);
 
         }).catch(err => {
         this.toastr.error(angular.toJson(err));
       });
     }
 
-    node.deleting = this.$timeout(2000).then(() =>{
+    node.deleting = this.$timeout(2000).then(() => {
       delete node.deleting;
     });
 
+  }
+
+  downloadTreeItem(node) {
+
+    this.busy = this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID, path: node.level}, {force: true})
+      .then(result => {
+
+        let blob = this.base64toBlob(result.result);
+        FileSaver.saveAs(blob, node.label);
+
+      })
+      .catch(err => {
+        this.toastr.error(angular.toJson(err));
+      });
+
+  }
+
+  base64toBlob(base64Data, contentType) {
+    contentType = contentType || '';
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64Data);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, {type: contentType});
   }
 
 }

@@ -59,6 +59,8 @@ export class SocketAdapter extends Adapter {
 
       let level = _.get(query, 'level');
 
+      let path = _.get(query, 'path');
+
       let entityName = _.get(query, 'entityName');
 
       let pageSize = _.get(query, 'pageSize');
@@ -111,9 +113,34 @@ export class SocketAdapter extends Adapter {
 
           }
 
+          if (path) {
+
+            request = {
+
+              "STMCoreSessionFiler": {
+                "base64ofFileAtPath:": path
+              }
+
+            };
+
+            get = 'STMCoreSessionFiler.base64ofFileAtPath:';
+
+          }
+
           this.socket.emit('device:pushRequest', UUID, request, response => {
 
-            resolve(_.get(response, get));
+            let result = _.get(response, get);
+
+            if (result) {
+              if (!_.isObject(result)){
+                result = {
+                  result
+                }
+              }
+              resolve(result);
+            }else{
+              reject(response);
+            }
 
           });
 
@@ -145,7 +172,13 @@ export class SocketAdapter extends Adapter {
 
           this.socket.emit('device:pushRequest', UUID, request, response => {
 
-            resolve(_.get(response, "STMRemotePersisterController.findAllRemote:"));
+            let result = _.get(response, "STMRemotePersisterController.findAllRemote:");
+
+            if (result){
+              resolve(result);
+            }else{
+              reject(response);
+            }
 
           });
 
@@ -158,8 +191,7 @@ export class SocketAdapter extends Adapter {
 
   count(mapper, query, opts){ // eslint-disable-line
 
-    return new Promise((resolve
-) => {
+    return new Promise((resolve, reject) => {
 
       let request = {};
 
@@ -181,7 +213,13 @@ export class SocketAdapter extends Adapter {
 
           this.socket.emit('device:pushRequest', UUID, request, response => {
 
-            resolve(_.get(response, "STMRemotePersisterController.countRemote:"));
+            let result = _.get(response, "STMRemotePersisterController.countRemote:");
+
+            if (result){
+              resolve(result);
+            }else{
+              reject(response);
+            }
 
           });
 
@@ -197,7 +235,7 @@ export class SocketAdapter extends Adapter {
 
     debug('device:pushRequest');
 
-    return new Promise((resolve => {
+    return new Promise(((resolve, reject) => {
 
       let UUID = _.get(query, 'deviceUUID');
 
@@ -225,7 +263,17 @@ export class SocketAdapter extends Adapter {
 
           this.socket.emit('device:pushRequest', UUID, request, response => {
 
-            resolve(_.get(response, get));
+            debug(response);
+
+            let result = _.get(response, get);
+
+            debug(result);
+
+            if (!result){
+              resolve();
+            }else{
+              reject(response);
+            }
 
           });
 
