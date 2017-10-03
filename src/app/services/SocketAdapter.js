@@ -165,6 +165,8 @@ export class SocketAdapter extends Adapter {
                 "options": {
                   "pageSize": pageSize,
                   "startPage": startPage
+                  sortBy: 'deviceCts',
+                  direction: 'DESC'
                 }
               }
             }
