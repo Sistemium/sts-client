@@ -161,10 +161,10 @@ export class SocketAdapter extends Adapter {
           request = {
             "STMRemotePersisterController": {
               "findAllRemote:": {
-                "entityName": entityName,
-                "options": {
-                  "pageSize": pageSize,
-                  "startPage": startPage
+                entityName,
+                options: {
+                  pageSize,
+                  startPage,
                   sortBy: 'deviceCts',
                   direction: 'DESC'
                 }
