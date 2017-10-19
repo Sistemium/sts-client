@@ -44,7 +44,8 @@ function browserSyncInit(baseDir, browser) {
     browser: browser,
     notify: false,
     ui: false,
-    ghostMode: false
+    ghostMode: false,
+    port: 3200
   });
 }
 
