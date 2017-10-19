@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import angular from 'angular';
 
-const debug = require('debug')('sts:socket'); // eslint-disable-line
+const debug = require('debug')('sts:detail'); // eslint-disable-line
 const FileSaver = require('file-saver');
 
 export class DetailController {
