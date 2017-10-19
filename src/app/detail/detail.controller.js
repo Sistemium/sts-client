@@ -184,6 +184,10 @@ export class DetailController {
           })
         }
 
+      }).catch(err => {
+
+        debug(err);
+
       });
 
     return this.busy;
