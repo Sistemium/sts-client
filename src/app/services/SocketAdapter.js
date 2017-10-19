@@ -2,6 +2,7 @@ import {Adapter} from 'js-data-adapter'
 import _ from 'lodash';
 
 const debug = require('debug')('sts:socket'); // eslint-disable-line
+const uuid = require('uuid');
 
 export class SocketAdapter extends Adapter {
 
@@ -69,7 +70,10 @@ export class SocketAdapter extends Adapter {
 
       let request = {};
 
+      let sessionID;
+
       switch (mapper.name) {
+
         case 'session':
           this.socket.emit('session:state:findAll', response => {
 
@@ -183,6 +187,58 @@ export class SocketAdapter extends Adapter {
           });
 
           break;
+
+        case 'uploadableFile':
+
+          if (!UUID) {
+            reject('deviceUUID or fileURL is not defined');
+            break;
+          }
+
+          if (path){
+
+            sessionID = uuid.v4();
+
+            request = {
+
+              STMCoreSessionFiler: {
+                "uploadFileAtPath:": {
+                  path,
+                  sessionID
+                }
+              }
+
+            };
+
+            get = 'STMCoreSessionFiler.uploadFileAtPath:';
+
+          }
+
+          this.socket.emit('device:pushRequest', UUID, request, response => {
+
+            let result = _.get(response, get);
+
+            if (sessionID){
+
+              result.sessionID = sessionID;
+
+            }
+
+            if (result) {
+              if (!_.isObject(result)){
+                result = {
+                  result
+                }
+              }
+              resolve(result);
+            }else{
+              reject(response);
+            }
+
+          });
+
+          break;
+
       }
 
     });

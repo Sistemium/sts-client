@@ -10,5 +10,6 @@ export default function (store) {
   });
   store.defineModel('deviceFile');
   store.defineModel('entity');
+  store.defineModel('uploadableFile');
 
 }

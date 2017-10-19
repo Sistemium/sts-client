@@ -6,7 +6,7 @@ const FileSaver = require('file-saver');
 
 export class DetailController {
 
-  constructor($state, $rootScope, SessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, $timeout, StsData) {
+  constructor($state, $rootScope, SessionCommands, NgTableParams, treeConfig, toastr, $q, $scope, $timeout, StsData, $http) {
     'ngInject';
 
     this.$state = $state;
@@ -15,6 +15,7 @@ export class DetailController {
     this.dataStore = StsData;
     this.$timeout = $timeout;
     this.toastr = toastr;
+    this.$http = $http;
 
     let rootScope = $rootScope;
     treeConfig.defaultCollapsed = true;
@@ -274,17 +275,75 @@ export class DetailController {
 
   downloadTreeItem(node) {
 
-    this.busy = this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID, path: node.level}, {force: true})
-      .then(result => {
+    if (this.minBuild(350)) {
+
+      this.busy = this.dataStore.findAll('uploadableFile', {deviceUUID: this.$scope.UUID, path: node.level}, {force: true})
+        .then(result => {
+
+          debug(result);
+
+          let unwatchProgress = this.$scope.$watch(() => {
+            return result.receivedBytes;
+          }, () => {
+            debug(result);
+          });
+
+          let unwatchSucess = this.$scope.$watch(() => {
+            return result.path;
+          }, () => {
+
+            if (result.path){
+
+              this.$http({
+                method: 'GET',
+                url: result.path,
+                responseType: 'blob'
+              }).then(response => {
+
+                FileSaver.saveAs(response.data, result.path.split('/').pop());
+
+              }, err => {
+
+                debug(err);
+
+                this.toastr.error(angular.toJson(err));
+
+              });
+
+              unwatchProgress();
+              unwatchSucess();
+
+            }
+
+          });
+
+        })
+        .catch(err => {
+
+          debug(err);
+
+          this.toastr.error(angular.toJson(err));
+
+        });
+
+    } else {
+
+      this.busy = this.dataStore.findAll('deviceFile', {deviceUUID: this.$scope.UUID, path: node.level}, {force: true})
+        .then(result => {
 
         let blob = this.base64toBlob(result.result);
         FileSaver.saveAs(blob, node.label);
 
       })
-      .catch(err => {
-        this.toastr.error(angular.toJson(err));
-      });
+        .catch(err => {
 
+          this.toastr.error(angular.toJson(err));
+
+          debug(err);
+
+        });
+
+    }
   }
 
   base64toBlob(base64Data, contentType) {
