@@ -50,6 +50,30 @@ export class SocketAdapter extends Adapter {
 
     });
 
+    this.socket.on('uploadSuccess', info =>{
+
+      let sessionID = info.sessionID;
+
+      let uploadableFile =_.find(store.getAll('uploadableFile'), file => file.sessionID === sessionID);
+
+      uploadableFile.path = info.filePath;
+
+    });
+
+    this.socket.on('uploadProgress', info =>{
+
+      let sessionID = info.sessionID;
+
+      let uploadableFile =_.find(store.getAll('uploadableFile'), file => file.sessionID === sessionID);
+
+      uploadableFile.totalSize = info.totalSize;
+
+      uploadableFile.receivedBytes = info.receivedBytes;
+
+
+
+    });
+
   }
 
   findAll(mapper, query, opts) { // eslint-disable-line
