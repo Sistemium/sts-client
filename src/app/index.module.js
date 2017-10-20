@@ -1,6 +1,6 @@
 /* global angular:false moment:false */
 
-import {config, localStorageConfig, cgBusyDefaults, localStorageServiceConfig} from './index.config';
+import {config, cgBusyDefaults, localStorageServiceConfig} from './index.config';
 import {routerConfig} from './index.route';
 import {runBlock} from './index.run';
 import {MainController} from './main/main.controller';
@@ -34,7 +34,6 @@ angular.module('stsClient', [
   'LocalStorageModule'
 ])
   .config(config)
-  .config(localStorageConfig)
   .config(routerConfig)
   .config(localStorageServiceConfig)
   .run(runBlock)

@@ -9,11 +9,6 @@ export function config($logProvider, toastrConfig) {
   toastrConfig.positionClass = 'toast-top-right';
 }
 
-export function localStorageConfig(localStorageServiceProvider) {
-  'ngInject';
-  localStorageServiceProvider.setPrefix('junk');
-}
-
 const cgBusyDefaults = {
   message: 'Loading ...',
   //backdrop: false,

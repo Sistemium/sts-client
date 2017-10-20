@@ -20,8 +20,8 @@ export function Auth(localStorageService, toastr, Socket, StsData, $rootScope) {
     authorize(token){
 
       if (!token){
-        debug(this);
         token = localStorageService.get('authorization');
+        debug(token);
       }
 
       if (!token) {
