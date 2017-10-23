@@ -1,5 +1,5 @@
 .tree-node.tree-node-content(ui-tree-handle='')
-  div(data-nodrag='' ng-mouseenter='treeItmemFocused = true' ng-mouseleave='treeItmemFocused = false')
+  div(data-nodrag='' ng-mouseenter='treeItemFocused = true' ng-mouseleave='treeItemFocused = false')
     a(href='' ng-click='vm.toggle(toggle,this,node)')
       span.glyphicon(ng-class="{\
       'glyphicon-chevron-right closed': collapsed,\
@@ -7,11 +7,12 @@
       span(ng-bind-html='node.label') {{node.label}}
     a(href='' ng-click='vm.downloadTreeItem(node)' ng-show='node.children.length > 0 && !node.children[0].children')
       span.glyphicon(ng-class="{\
-     'glyphicon glyphicon glyphicon-download-alt': vm.minBuild(348) && treeItmemFocused}")
+     'glyphicon glyphicon glyphicon-download-alt': vm.minBuild(348) && (treeItemFocused || node.progress)}")
     a(href='' ng-click='vm.removeTreeItem(node)')
      span.glyphicon(ng-class="{\
-     'glyphicon glyphicon-trash': vm.minBuild(347) && treeItmemFocused,\
+     'glyphicon glyphicon-trash': vm.minBuild(347) && (treeItemFocused || node.progress),\
       red: node.deleting}")
+    span(ng-if = '(node.progress)')  {{node.progress}} %
 ul(ui-tree-nodes='' ng-model='node.children' ng-if="!collapsed")
   li(ng-repeat='node in node.children' ui-tree-node='' ng-include="node.children ? 'app/detail/parent_items_renderer.html' :  'app/detail/terminal_item_renderer.html' ")
 

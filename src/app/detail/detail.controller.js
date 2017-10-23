@@ -287,7 +287,9 @@ export class DetailController {
           let unwatchProgress = this.$scope.$watch(() => {
             return result.receivedBytes;
           }, () => {
-            debug(result);
+            if (result.totalSize){
+              node.progress = Math.trunc(result.receivedBytes / result.totalSize * 100);
+            }
           });
 
           let unwatchError = this.$scope.$watch(() => {
@@ -303,6 +305,7 @@ export class DetailController {
               unwatchProgress();
               unwatchSucess();
               unwatchError();
+              node.progress = undefined;
 
             }
 
@@ -333,6 +336,7 @@ export class DetailController {
               unwatchProgress();
               unwatchSucess();
               unwatchError();
+              node.progress = undefined;
 
             }
 
