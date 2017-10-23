@@ -284,12 +284,28 @@ export class DetailController {
       this.busy = this.dataStore.findAll('uploadableFile', {deviceUUID: this.$scope.UUID, path: node.level}, {force: true})
         .then(result => {
 
-          debug(result);
-
           let unwatchProgress = this.$scope.$watch(() => {
             return result.receivedBytes;
           }, () => {
             debug(result);
+          });
+
+          let unwatchError = this.$scope.$watch(() => {
+            return result.error;
+          }, () => {
+
+            if(result.error){
+
+              debug(result.error);
+
+              this.toastr.error(result.error);
+
+              unwatchProgress();
+              unwatchSucess();
+              unwatchError();
+
+            }
+
           });
 
           let unwatchSucess = this.$scope.$watch(() => {
@@ -316,6 +332,7 @@ export class DetailController {
 
               unwatchProgress();
               unwatchSucess();
+              unwatchError();
 
             }
 

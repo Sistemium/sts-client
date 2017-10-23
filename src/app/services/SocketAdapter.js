@@ -70,7 +70,15 @@ export class SocketAdapter extends Adapter {
 
       uploadableFile.receivedBytes = info.receivedBytes;
 
+    });
 
+    this.socket.on('uploadError', info =>{
+
+      let sessionID = info.sessionID;
+
+      let uploadableFile =_.find(store.getAll('uploadableFile'), file => file.sessionID === sessionID);
+
+      uploadableFile.error = info.error;
 
     });
 
