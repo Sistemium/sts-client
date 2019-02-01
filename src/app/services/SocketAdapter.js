@@ -165,7 +165,7 @@ export class SocketAdapter extends Adapter {
                 options: {
                   pageSize,
                   startPage,
-                  sortBy: 'deviceCts',
+                  sortBy: 'lts,deviceTs',
                   direction: 'DESC'
                 }
               }
@@ -177,6 +177,7 @@ export class SocketAdapter extends Adapter {
             let result = _.get(response, "STMRemotePersisterController.findAllRemote:");
 
             if (result){
+              console.info (result);
               resolve(result);
             }else{
               reject(response);

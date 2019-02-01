@@ -25,32 +25,13 @@ export class DetailController {
 
     if (_.get(this.session, 'deviceInfo')) {
 
-      _.set(this.session, 'commands', [{
-        buttonName: "Full Sync",
-        action: () => {
-
-          if (!$scope.UUID) return;
-
-          return SessionCommands.fullSync($scope.UUID)
-            .then(response => {
-
-              if (response) {
-
-                toastr.success("Successful sync", "Full Sync");
-
-              } else {
-
-                toastr.error("Unsuccessful sync", "Full Sync");
-
-              }
-
-            }).catch(error => {
-
-              toastr.error("Unsuccessful sync - " + error, "Full Sync");
-
-            });
-        }
-      }]);
+      this.session.commands = [{
+        buttonName: 'Full Sync',
+        action: buttonHandler('Full Sync', SessionCommands.fullSync)
+      }, {
+        buttonName: 'Flushing',
+        action: buttonHandler('Flushing', SessionCommands.checkObjectsForFlushing)
+      }];
 
     }
 
@@ -127,6 +108,26 @@ export class DetailController {
 
       }
     });
+
+    function buttonHandler(name, fn) {
+      return () => {
+
+        if (!$scope.UUID) return;
+
+        return fn($scope.UUID)
+          .then(response => {
+
+            if (response) {
+              toastr.success("Success!", name);
+            } else {
+              toastr.error("Fail", name);
+            }
+
+          }).catch(error => {
+            toastr.error("Error:" + error, name);
+          });
+      }
+    }
 
   }
 
